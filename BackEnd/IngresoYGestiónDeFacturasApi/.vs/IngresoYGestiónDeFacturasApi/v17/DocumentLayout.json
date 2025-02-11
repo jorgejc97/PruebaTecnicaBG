@@ -1,12 +1,139 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Migrations\\20250211213954_FirsMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Migrations\\20250211213954_FirsMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:controllers\\usuarioscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\datos\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:datos\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\utilidades\\automapperprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:utilidades\\automapperprofiles.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|c:\\dev\\proyects\\pruebatecnicabg\\backend\\ingresoygesti\u00F3ndefacturasapi\\entidades\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BA41DC49-ACEC-4553-BB18-E07E7F2600CC}|IngresoYGesti\u00F3nDeFacturasApi.csproj|solutionrelative:entidades\\usuario.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "20250211213954_FirsMigration.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Migrations\\20250211213954_FirsMigration.cs",
+              "RelativeDocumentMoniker": "Migrations\\20250211213954_FirsMigration.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Migrations\\20250211213954_FirsMigration.cs",
+              "RelativeToolTip": "Migrations\\20250211213954_FirsMigration.cs",
+              "ViewState": "AgIAADEAAAAAAAAAAAAgwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T21:39:54.619Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\appsettings.json",
+              "RelativeDocumentMoniker": "appsettings.json",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\appsettings.json",
+              "RelativeToolTip": "appsettings.json",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAABVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-02-11T21:38:24.866Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "AutoMapperProfiles.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Utilidades\\AutoMapperProfiles.cs",
+              "RelativeDocumentMoniker": "Utilidades\\AutoMapperProfiles.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Utilidades\\AutoMapperProfiles.cs",
+              "RelativeToolTip": "Utilidades\\AutoMapperProfiles.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T21:24:43.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T21:10:37.731Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "UsuariosController.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Controllers\\UsuariosController.cs",
+              "RelativeDocumentMoniker": "Controllers\\UsuariosController.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Controllers\\UsuariosController.cs",
+              "RelativeToolTip": "Controllers\\UsuariosController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAiwCwAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T21:18:34.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Usuario.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Entidades\\Usuario.cs",
+              "RelativeDocumentMoniker": "Entidades\\Usuario.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Entidades\\Usuario.cs",
+              "RelativeToolTip": "Entidades\\Usuario.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAAsAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T20:31:48.173Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Datos\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "Datos\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\DEV\\Proyects\\PruebaTecnicaBG\\BackEnd\\IngresoYGesti\u00F3nDeFacturasApi\\Datos\\ApplicationDbContext.cs",
+              "RelativeToolTip": "Datos\\ApplicationDbContext.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-02-11T20:16:33.131Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
