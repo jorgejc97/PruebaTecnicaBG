@@ -1,10 +1,10 @@
-import { Loginpage } from "./auth";
+import { AppRoutes } from "./routes";
 import { AppTheme } from "./theme";
 
 export const App = () => {
   return (
     <AppTheme>
-      <Loginpage></Loginpage>
+      <AppRoutes />
     </AppTheme>
   );
 };

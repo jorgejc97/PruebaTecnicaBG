@@ -1,10 +1,16 @@
+import { LoadingScreen } from "../../theme";
 import { AuthLayout } from "../layout";
 import { Alert, Button, Grid, TextField } from "@mui/material";
 
 let user = "";
 let pass = "";
 
-export const Loginpage = () => {
+export const LoginPage = () => {
+  const onPressLogin = async () => {
+    let status = "checking";
+
+    if (status === "checking") return <LoadingScreen />;
+  };
   return (
     <AuthLayout title={"Login"}>
       <form>
@@ -52,7 +58,7 @@ export const Loginpage = () => {
                 variant="contained"
                 fullWidth
                 type="submit"
-                onClick={undefined}
+                onClick={onPressLogin}
               >
                 Login
               </Button>
