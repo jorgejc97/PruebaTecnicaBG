@@ -1,6 +1,10 @@
-import React from "react";
 import { Loginpage } from "./auth";
+import { AppTheme } from "./theme";
 
 export const App = () => {
-  return <Loginpage></Loginpage>;
+  return (
+    <AppTheme>
+      <Loginpage></Loginpage>
+    </AppTheme>
+  );
 };

@@ -1,4 +1,3 @@
-import React from "react";
 import { AuthLayout } from "../layout";
 import { Alert, Button, Grid, TextField } from "@mui/material";
 
@@ -9,8 +8,8 @@ export const Loginpage = () => {
   return (
     <AuthLayout title={"Login"}>
       <form>
-        <Grid container>
-          <Grid item xs={12} sx={{ mt: 2 }}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
             <TextField
               disabled={false}
               label="Correo"
@@ -21,7 +20,8 @@ export const Loginpage = () => {
               onChange={() => {}}
             />
           </Grid>
-          <Grid item xs={12} sx={{ mt: 2 }}>
+
+          <Grid item xs={12}>
             <TextField
               disabled={false}
               label="Contraseña"
@@ -32,11 +32,22 @@ export const Loginpage = () => {
               onChange={() => {}}
             />
           </Grid>
-          <Grid container spacing={2} sx={{ mb: 2, mt: 1 }}>
+
+          <Grid
+            item
+            xs={12}
+            container
+            spacing={2}
+            sx={{
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
             <Grid item xs={12} display={"none"}>
               <Alert severity="error">hola</Alert>
             </Grid>
-            <Grid item xs={12} sm={6}>
+
+            <Grid item xs={6}>
               <Button
                 variant="contained"
                 fullWidth
