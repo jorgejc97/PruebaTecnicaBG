@@ -1,8 +1,5 @@
-﻿using AutoMapper;
-using BibliotecaAPI.DTO;
-using BibliotecaAPI.Entidades;
-
-namespace BibliotecaAPI.Utilidades
+﻿
+namespace IngresoYGestiónDeFacturasApi.Utility
 {
     public class AutoMapperProfiles : Profile
     {

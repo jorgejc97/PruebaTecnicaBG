@@ -1,0 +1,32 @@
+﻿global using Microsoft.AspNetCore.Diagnostics;
+global using Microsoft.AspNetCore.Mvc;
+global using Carter;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+global using Microsoft.EntityFrameworkCore;
+global using System.ComponentModel.DataAnnotations.Schema;
+global using System.Security.Cryptography;
+global using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+global using System.IdentityModel.Tokens.Jwt;
+global using System.Security.Claims;
+global using System.Text;
+global using Microsoft.IdentityModel.Tokens;
+global using Microsoft.AspNetCore.Authentication.JwtBearer;
+global using Microsoft.OpenApi.Models;
+global using Microsoft.AspNetCore.Authorization;
+global using IngresoYGestiónDeFacturasApi.Exceptions;
+global using IngresoYGestiónDeFacturasApi.Entity;
+global using IngresoYGestiónDeFacturasApi;
+global using IngresoYGestiónDeFacturasApi.Exceptions.Handler;
+global using IngresoYGestiónDeFacturasApi.Extension;
+global using IngresoYGestiónDeFacturasApi.Services;
+global using Microsoft.EntityFrameworkCore.ChangeTracking;
+global using Microsoft.EntityFrameworkCore.Diagnostics;
+global using IngresoYGestiónDeFacturasApi.Abstractions;
+global using IngresoYGestiónDeFacturasApi.DTO;
+global using Serilog;
+global using Serilog.Events;
+
+global using AutoMapper;
+global using IngresoYGestiónDeFacturasApi.Data;
+

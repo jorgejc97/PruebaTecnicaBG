@@ -11,25 +11,25 @@ let user = "";
 let pass = "";
 
 if (process.env.NODE_ENV === "development") {
-  user = "admin";
-  pass = "A!avc89043";
+  user = "admin@correo.com";
+  pass = "Abc123*+";
 }
 export const LoginPage = () => {
   const { onLogin } = useAuthStore();
   const [fetchLogin, { isLoading }] = usePostLoginMutation();
 
   const {
-    formState: { username, password },
+    formState: { email, password },
     onChange,
     isFormValid,
     errors,
   } = useForm<LoginInfo>(
     {
-      username: user,
+      email: user,
       password: pass,
     },
     {
-      username: [(value) => value.length > 2, "Ingrese un correo válido"],
+      email: [(value) => value.length > 2, "Ingrese un correo válido"],
       password: [
         (value) => value.length >= 6,
         "El password debe tener más de 6 letras.",
@@ -39,7 +39,7 @@ export const LoginPage = () => {
 
   const onPressLogin = async () => {
     await fetchLogin({
-      username,
+      email,
       password,
     })
       .unwrap()
@@ -51,7 +51,11 @@ export const LoginPage = () => {
         await onLogin({ ...jwt, userName: decoded.email });
       })
       .catch((error) => {
-        Swal.fire("Error", error?.data?.detail ?? "Ocurrió un error", "error");
+        Swal.fire(
+          "Error",
+          error.data.errors?.Error[0] ?? "Ocurrió un error",
+          "error"
+        );
       });
   };
   return (
@@ -65,10 +69,10 @@ export const LoginPage = () => {
               type="email"
               placeholder="correo@correo.com"
               fullWidth
-              value={username}
-              onChange={({ target: { value } }) => onChange("username", value)}
-              error={!!errors.username}
-              helperText={errors.username}
+              value={email}
+              onChange={({ target: { value } }) => onChange("email", value)}
+              error={!!errors.email}
+              helperText={errors.email}
             />
           </Grid>
 

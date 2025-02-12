@@ -8,10 +8,15 @@ import {
   Avatar,
   Box,
 } from "@mui/material";
+import { useAuthStore } from "../../shared";
 
 export const NavBar = () => {
-  let userName = "Jorge";
-  const onPressLogOut = () => {};
+  const {
+    jwtInfo: { userName },
+    onLogOut,
+  } = useAuthStore();
+
+  const onPressLogOut = () => onLogOut();
   return (
     <AppBar position="fixed">
       <Toolbar>
