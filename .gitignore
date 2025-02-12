@@ -33,4 +33,4 @@ coverage/
 bin/
 obj/
 out/
-/WebApiDotNetCore/.vs
+/BackEnd/IngresoYGestiónDeFacturasApi/.vs

@@ -79,6 +79,20 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
+// Configurar Serilog
+Log.Logger = new LoggerConfiguration()
+    .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+    .Enrich.FromLogContext()
+    .WriteTo.Console()
+    .WriteTo.File(
+        path: $"Logs/{AppDomain.CurrentDomain.FriendlyName}-{DateTime.Now:yyyyMMdd}.txt",
+        rollingInterval: RollingInterval.Day,
+        retainedFileCountLimit: 7,
+        outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {Message:lj}{NewLine}{Exception}")
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
 
 builder.Services.AddCors(options =>
 {
@@ -109,6 +123,7 @@ if (app.Environment.IsDevelopment())
     await app.InitializeDatabaseAsync();
 }
 
+app.UseSerilogRequestLogging();
 app.MapCarter();
 app.UseCors("CorsPolicy");
 app.UseExceptionHandler(options => { });
