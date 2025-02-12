@@ -16,6 +16,10 @@ namespace IngresoYGestiónDeFacturasApi.Data
             modelBuilder.Entity<IdentityUserLogin<string>>().ToTable("UserLogin", "SEG");
         }
 
-
+        public DbSet<Vendedor> Vendedores => Set<Vendedor>();
+        public DbSet<Cliente> Clientes => Set<Cliente>();
+        public DbSet<Producto> Productos => Set<Producto>();
+        public DbSet<PaymentMetod> PaymentMetods => Set<PaymentMetod>();
+        public DbSet<PaymentStatus> PaymentStatuses => Set<PaymentStatus>();
     }
 }
