@@ -23,7 +23,8 @@ public class CreateTokenService(UserManager<User> userManager, IConfiguration co
         return new AuthenticationResponseDTO
         {
             Token = new JwtSecurityTokenHandler().WriteToken(securtityToken),
-            Expiracion = expiration
+            Expiracion = expiration,
+            UserInfo = user.ToUserDTO()
         };
     }
 }
