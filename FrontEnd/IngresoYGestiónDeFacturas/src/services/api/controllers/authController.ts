@@ -1,5 +1,5 @@
-import { baseApiConfig, LOGIN_BASE_URL } from "../config";
-import { JWTInfo, LoginInfo } from "../../../auth";
+import { baseApiConfig, LOGIN_BASE_URL, USER_BASE_URL } from "../config";
+import { JWTInfo, LoginInfo, UserInfo } from "../../../auth";
 import { createApi } from "@reduxjs/toolkit/query/react";
 export const authController = createApi({
   reducerPath: "authController",
@@ -16,7 +16,15 @@ export const authController = createApi({
         body,
       }),
     }),
+    //PUT
+    putUser: build.mutation<void, UserInfo>({
+      query: (body) => ({
+        url: USER_BASE_URL,
+        method: "PUT",
+        body,
+      }),
+    }),
   }),
 });
 
-export const { usePostLoginMutation } = authController;
+export const { usePostLoginMutation, usePutUserMutation } = authController;

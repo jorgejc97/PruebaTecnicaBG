@@ -6,7 +6,17 @@ const initialState: AuthInfo = {
   jwtInfo: {
     token: "",
     expiracion: "",
-    userName: "",
+    userInfo: {
+      id: "",
+      nameCompany: "",
+      phoneNumber: "",
+      email: "",
+      iva: 0,
+      city: "",
+      regionProvince: "",
+      address: "",
+      zipcode: 0,
+    },
   },
 };
 

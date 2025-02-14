@@ -1,4 +1,3 @@
-import { jwtDecode } from "jwt-decode";
 import { useForm } from "../../hooks";
 import { usePostLoginMutation } from "../../services";
 import { useAuthStore } from "../../shared";
@@ -44,22 +43,14 @@ export const LoginPage = () => {
     })
       .unwrap()
       .then(async (jwt) => {
-        const decoded: {
-          email: string;
-          exp: number;
-        } = jwtDecode(jwt.token);
-        await onLogin({ ...jwt, userName: decoded.email });
+        await onLogin(jwt);
       })
       .catch((error) => {
-        Swal.fire(
-          "Error",
-          error.data.errors?.Error[0] ?? "Ocurrió un error",
-          "error"
-        );
+        Swal.fire("Error", error?.data?.detail ?? "Ocurrió un error", "error");
       });
   };
   return (
-    <AuthLayout title={"Login"}>
+    <AuthLayout title={"INVOICE SYSTEM"}>
       <form>
         <Grid container spacing={2}>
           <Grid item xs={12}>
