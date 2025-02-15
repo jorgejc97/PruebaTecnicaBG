@@ -199,7 +199,7 @@ export const SellersPage = () => {
   const [fetchGetSellers, { isLoading }] = useLazyGetSellersQuery();
   const [fetchDeleteSeller] = useDeleteSellerMutation();
   const [filter, setFilter] = useState("");
-  const [filteredSellers, setFilteredSelles] = useState(users);
+  const [filteredSellers, setFilteredSellers] = useState(users);
   const [page, setPage] = useState(0);
 
   const onPressDeleteSeller = async (seller: Seller) => {
@@ -228,13 +228,13 @@ export const SellersPage = () => {
     setFilter(filterValue);
     if (filterValue) {
       const filtered = users.filter(
-        (user) =>
-          user.name.toLowerCase().includes(filterValue.toLowerCase()) ||
-          user.identification.includes(filterValue)
+        (seller) =>
+          seller.name.toLowerCase().includes(filterValue.toLowerCase()) ||
+          seller.identification.includes(filterValue)
       );
-      setFilteredSelles(filtered);
+      setFilteredSellers(filtered);
     } else {
-      setFilteredSelles(users);
+      setFilteredSellers(users);
     }
   };
 

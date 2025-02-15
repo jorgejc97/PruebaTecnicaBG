@@ -14,6 +14,7 @@ import {
   usePostProductMutation,
 } from "../../services";
 import { useProductStore } from "../../shared";
+import { useEffect } from "react";
 
 interface Props {
   open: boolean;
@@ -24,23 +25,24 @@ interface Props {
 
 export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
   const { onSetProducts } = useProductStore();
-  const { formState, onChange, isFormValid, errors } = useForm<Product>(
-    {
-      id: null,
-      code: "",
-      name: "",
-      quantity: 0,
-      unitPrice: 0.0,
-      createdAt: null,
-      active: null,
-    },
-    {
-      code: [(value) => value.length > 2, "Ingrese un nombre válido"],
-      name: [(value) => value.length > 2, "Ingrese un nombre válido"],
-      quantity: [(value) => value > 0, "Ingrese un correo válido"],
-      unitPrice: [(value) => value > 0, "Ingrese un correo válido"],
-    }
-  );
+  const { formState, onChange, isFormValid, errors, resetForm } =
+    useForm<Product>(
+      {
+        id: null,
+        code: "",
+        name: "",
+        quantity: 0,
+        unitPrice: 0.0,
+        createdAt: null,
+        active: null,
+      },
+      {
+        code: [(value) => value.length > 2, "Ingrese un codigo válido"],
+        name: [(value) => value.length > 2, "Ingrese un producto válido"],
+        quantity: [(value) => value > 0, "Ingrese un minimo 1 producto"],
+        unitPrice: [(value) => value > 0, "Ingrese un precio valido"],
+      }
+    );
   const [fetchPostProduct, { isLoading }] = usePostProductMutation();
   const [fetchGetProducts, { isLoading: isLoadingProducts }] =
     useLazyGetProductsQuery();
@@ -56,6 +58,10 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
       });
   };
 
+  useEffect(() => {
+    !open && resetForm();
+  }, [open]);
+
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Agregar Producto</DialogTitle>
@@ -63,7 +69,7 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
         <TextField
           autoFocus
           margin="dense"
-          label="Nombre"
+          label="Codigo"
           type="text"
           fullWidth
           value={formState.code}
@@ -73,8 +79,8 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
         />
         <TextField
           margin="dense"
-          name="descripcion"
-          label="Descripción"
+          name="Producto"
+          label="Producto"
           type="text"
           fullWidth
           value={formState.name}
@@ -86,25 +92,27 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
           margin="dense"
           name="cantidad"
           label="Cantidad"
-          type="number"
+          type="text"
           fullWidth
-          value={formState.quantity}
-          onChange={({ target: { value } }) =>
-            onChange("quantity", Number(value))
-          }
+          value={formState.quantity === 0 ? "0" : formState.quantity}
+          onChange={({ target: { value } }) => {
+            const regex = /^\d{0,3}$/;
+            regex.test(value) && onChange("quantity", Number(value));
+          }}
           error={!!errors.quantity}
           helperText={errors.quantity}
         />
         <TextField
           margin="dense"
-          name="cantidad"
-          label="Cantidad"
-          type="number"
+          name="Precio Unitario"
+          label="Precio Unitario"
+          type="text"
           fullWidth
-          value={formState.unitPrice}
-          onChange={({ target: { value } }) =>
-            onChange("unitPrice", Number(value))
-          }
+          value={formState.unitPrice === 0 ? "0" : formState.unitPrice}
+          onChange={({ target: { value } }) => {
+            const regex = /^\d{0,3}$/;
+            regex.test(value) && onChange("unitPrice", Number(value));
+          }}
           error={!!errors.unitPrice}
           helperText={errors.unitPrice}
         />

@@ -15,13 +15,23 @@ import {
   Grid,
   Typography,
   Box,
-  Button,
+  BottomNavigation,
+  BottomNavigationAction,
 } from "@mui/material";
 import { useAuthStore } from "../../shared";
-import { NavLink } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 export const NavBar = () => {
   const { onLogOut } = useAuthStore();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [value, setValue] = useState(location.pathname);
+
+  const handleNavigation = (event: any, newValue: string) => {
+    setValue(newValue);
+    navigate(newValue);
+  };
 
   const onPressLogOut = () => onLogOut();
 
@@ -48,39 +58,50 @@ export const NavBar = () => {
           </Box>
 
           {/* Links de Navegación */}
-          <Box sx={{ display: "flex", gap: 2 }}>
-            <Button component={NavLink} to="/home" sx={{ color: "white" }}>
-              <Home sx={{ mr: 1 }} />
-              Inicio
-            </Button>
-            <Button component={NavLink} to="/facturas" sx={{ color: "white" }}>
-              <Receipt sx={{ mr: 1 }} />
-              Facturas
-            </Button>
-            <Button component={NavLink} to="/productos" sx={{ color: "white" }}>
-              <List sx={{ mr: 1 }} />
-              Productos
-            </Button>
-            <Button component={NavLink} to="/clientes" sx={{ color: "white" }}>
-              <People sx={{ mr: 1 }} />
-              Clientes
-            </Button>
-            <Button
-              component={NavLink}
-              to="/vendedores"
-              sx={{ color: "white" }}
+          <Box sx={{ flexGrow: 1, maxWidth: "60%" }}>
+            <BottomNavigation
+              value={value}
+              onChange={handleNavigation}
+              showLabels
+              sx={{ bgcolor: "transparent" }}
             >
-              <Person sx={{ mr: 1 }} />
-              Vendedores
-            </Button>
-            <Button
-              component={NavLink}
-              to="/configuration"
-              sx={{ color: "white" }}
-            >
-              <Settings sx={{ mr: 1 }} />
-              configuracion
-            </Button>
+              <BottomNavigationAction
+                label="Inicio"
+                value="/home"
+                icon={<Home />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+              <BottomNavigationAction
+                label="Facturas"
+                value="/facturas"
+                icon={<Receipt />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+              <BottomNavigationAction
+                label="Productos"
+                value="/productos"
+                icon={<List />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+              <BottomNavigationAction
+                label="Clientes"
+                value="/clientes"
+                icon={<People />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+              <BottomNavigationAction
+                label="Vendedores"
+                value="/vendedores"
+                icon={<Person />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+              <BottomNavigationAction
+                label="Configuración"
+                value="/configuration"
+                icon={<Settings />}
+                sx={{ "&.Mui-selected": { color: "white" } }}
+              />
+            </BottomNavigation>
           </Box>
           <IconButton color="error" onClick={onPressLogOut}>
             <LogoutOutlined />

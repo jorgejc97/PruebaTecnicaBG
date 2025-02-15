@@ -10,7 +10,7 @@ let user = "";
 let pass = "";
 
 if (process.env.NODE_ENV === "development") {
-  user = "admin@correo.com";
+  user = "admin";
   pass = "Abc123*+";
 }
 export const LoginPage = () => {
@@ -28,7 +28,7 @@ export const LoginPage = () => {
       password: pass,
     },
     {
-      email: [(value) => value.length > 2, "Ingrese un correo válido"],
+      email: [(value) => value.length > 2, "Ingrese un usuario válido"],
       password: [
         (value) => value.length >= 6,
         "El password debe tener más de 6 letras.",

@@ -14,6 +14,7 @@ import {
   useLazyGetCustomersQuery,
   usePostCustomerMutation,
 } from "../../services";
+import { useEffect } from "react";
 
 interface Props {
   open: boolean;
@@ -24,34 +25,35 @@ interface Props {
 
 export const CustomerDialogAdd = ({ open = false, onClose }: Props) => {
   const { onSetCustomers } = useCustomerStore();
-  const { formState, onChange, isFormValid, errors } = useForm<Customer>(
-    {
-      id: null,
-      identification: "",
-      name: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      address: "",
-      createdAt: null,
-      active: null,
-    },
-    {
-      identification: [
-        (value) => value.length >= 10,
-        "Ingrese una identificación válida",
-      ],
-      name: [(value) => value.length > 2, "Ingrese un nombre válido"],
-      lastName: [(value) => value.length > 2, "Ingrese un apellido válido"],
-      phone: [(value) => value.length >= 10, "Ingrese un teléfono válido"],
-      email: [
-        (value) =>
-          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
-        "Ingrese un correo válido",
-      ],
-      address: [(value) => value.length > 2, "Ingrese una direccion válida"],
-    }
-  );
+  const { formState, onChange, isFormValid, errors, resetForm } =
+    useForm<Customer>(
+      {
+        id: null,
+        identification: "",
+        name: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        address: "",
+        createdAt: null,
+        active: null,
+      },
+      {
+        identification: [
+          (value) => value.length >= 10,
+          "Ingrese una identificación válida",
+        ],
+        name: [(value) => value.length > 2, "Ingrese un nombre válido"],
+        lastName: [(value) => value.length > 2, "Ingrese un apellido válido"],
+        phone: [(value) => value.length >= 10, "Ingrese un teléfono válido"],
+        email: [
+          (value) =>
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
+          "Ingrese un correo válido",
+        ],
+        address: [(value) => value.length > 2, "Ingrese una direccion válida"],
+      }
+    );
   const [fetchPostCustomer, { isLoading }] = usePostCustomerMutation();
   const [fetchGetCustomer, { isLoading: isLoadingCustomers }] =
     useLazyGetCustomersQuery();
@@ -66,6 +68,10 @@ export const CustomerDialogAdd = ({ open = false, onClose }: Props) => {
         throw error;
       });
   };
+
+  useEffect(() => {
+    !open && resetForm();
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose}>

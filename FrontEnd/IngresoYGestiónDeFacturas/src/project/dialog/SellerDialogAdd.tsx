@@ -11,6 +11,7 @@ import { useForm } from "../../hooks";
 import { Seller } from "../interface";
 import { useSellerStore } from "../../shared";
 import { useLazyGetSellersQuery, usePostSellerMutation } from "../../services";
+import { useEffect } from "react";
 
 interface Props {
   open: boolean;
@@ -21,34 +22,35 @@ interface Props {
 
 export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
   const { onSetSellers } = useSellerStore();
-  const { formState, onChange, isFormValid, errors } = useForm<Seller>(
-    {
-      id: null,
-      identification: "",
-      name: "",
-      lastName: "",
-      phone: "",
-      email: "",
-      address: "",
-      createdAt: null,
-      active: null,
-    },
-    {
-      identification: [
-        (value) => value.length >= 10,
-        "Ingrese una identificación válida",
-      ],
-      name: [(value) => value.length > 2, "Ingrese un nombre válido"],
-      lastName: [(value) => value.length > 2, "Ingrese un apellido válido"],
-      phone: [(value) => value.length >= 10, "Ingrese un teléfono válido"],
-      email: [
-        (value) =>
-          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
-        "Ingrese un correo válido",
-      ],
-      address: [(value) => value.length > 2, "Ingrese una direccion válida"],
-    }
-  );
+  const { formState, onChange, isFormValid, errors, resetForm } =
+    useForm<Seller>(
+      {
+        id: null,
+        identification: "",
+        name: "",
+        lastName: "",
+        phone: "",
+        email: "",
+        address: "",
+        createdAt: null,
+        active: null,
+      },
+      {
+        identification: [
+          (value) => value.length >= 10,
+          "Ingrese una identificación válida",
+        ],
+        name: [(value) => value.length > 2, "Ingrese un nombre válido"],
+        lastName: [(value) => value.length > 2, "Ingrese un apellido válido"],
+        phone: [(value) => value.length >= 10, "Ingrese un teléfono válido"],
+        email: [
+          (value) =>
+            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
+          "Ingrese un correo válido",
+        ],
+        address: [(value) => value.length > 2, "Ingrese una direccion válida"],
+      }
+    );
   const [fetchPostSeller, { isLoading }] = usePostSellerMutation();
   const [fetchGetSeller, { isLoading: isLoadingSellers }] =
     useLazyGetSellersQuery();
@@ -63,6 +65,10 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
         throw error;
       });
   };
+
+  useEffect(() => {
+    !open && resetForm();
+  }, [open]);
 
   return (
     <Dialog open={open} onClose={onClose}>
