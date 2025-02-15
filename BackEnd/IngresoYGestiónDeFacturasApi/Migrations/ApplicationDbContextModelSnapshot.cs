@@ -87,10 +87,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -109,8 +105,8 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("IVA")
-                        .HasColumnType("bigint");
+                    b.Property<decimal>("Iva")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
@@ -118,11 +114,8 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PaymantMethodId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("PaymantStatusId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<long>("Number")
+                        .HasColumnType("bigint");
 
                     b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
@@ -303,10 +296,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")
@@ -658,7 +647,7 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.InvoiceDetail", b =>
                 {
                     b.HasOne("IngresoYGestiónDeFacturasApi.Entity.Invoice", "Invoice")
-                        .WithMany("InvoiceDetail")
+                        .WithMany("InvoiceDetails")
                         .HasForeignKey("InvoiceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -732,7 +721,7 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
 
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.Invoice", b =>
                 {
-                    b.Navigation("InvoiceDetail");
+                    b.Navigation("InvoiceDetails");
                 });
 
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.PaymentMethod", b =>

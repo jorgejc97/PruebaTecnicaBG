@@ -11,6 +11,7 @@ export const baseApiConfig = fetchBaseQuery({
       "Authorization",
       `Bearer ${(getState() as RootState).auth.jwtInfo.token}`
     );
+    headers.set("ngrok-skip-browser-warning", "true"); // 🔹 Evita bloqueos con Ngrok
     return headers;
   },
 });

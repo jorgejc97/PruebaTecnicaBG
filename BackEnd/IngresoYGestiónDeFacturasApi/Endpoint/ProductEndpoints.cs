@@ -21,7 +21,6 @@ namespace IngresoYGestiónDeFacturasApi.Endpoint
                 var newProduct = Product.Create(
                     productDTO.Code,
                     productDTO.Name,
-                    productDTO.Description,
                     productDTO.Quantity,
                     productDTO.UnitPrice);
                 await context.Products.AddAsync(
@@ -40,7 +39,6 @@ namespace IngresoYGestiónDeFacturasApi.Endpoint
 
                 product.Code = productDTO.Code;
                 product.Name = productDTO.Name;
-                product.Description = productDTO.Description;
                 product.Quantity = productDTO.Quantity;
                 product.UnitPrice = productDTO.UnitPrice;
                 product.Active = productDTO.Active;

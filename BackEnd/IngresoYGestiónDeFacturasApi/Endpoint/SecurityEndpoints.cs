@@ -13,12 +13,12 @@ public class SecurityEndpoints : ICarterModule
             ) =>
         {
             var result = await signInManager.PasswordSignInAsync(
-                loginInfo.Email,
+                loginInfo.UserName,
                 loginInfo.Password,
                 isPersistent: false,
                 lockoutOnFailure: false);
             if (!result.Succeeded) throw new NotFoundException("Usuario no encontrado");
-            var tokenResponse = await createTokenService.CreateTokenCreateToken(loginInfo.Email);
+            var tokenResponse = await createTokenService.CreateTokenCreateToken(loginInfo.UserName);
             return Results.Ok(tokenResponse);
         }).WithTags("Security").AllowAnonymous();
 

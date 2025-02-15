@@ -11,3 +11,4 @@ export const SELLER_BASE_URL = "/sellers";
 export const PRODUCT_BASE_URL = "/product";
 export const METHOD_BASE_URL = "/paymaentmethod";
 export const STATUS_BASE_URL = "/paymentstatus";
+export const INVOICE_BASE_URL = "/invoice";

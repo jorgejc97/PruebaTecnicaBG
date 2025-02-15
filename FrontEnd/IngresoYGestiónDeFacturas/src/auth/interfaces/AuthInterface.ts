@@ -23,6 +23,6 @@ export interface AuthInfo {
 }
 
 export interface LoginInfo {
-  email: string;
+  userName: string;
   password: string;
 }

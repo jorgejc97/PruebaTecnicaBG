@@ -8,9 +8,9 @@
             Id = p.Id,
             Code = p.Code,
             Name = p.Name,
-            Description = p.Description,
             Quantity = p.Quantity,
             UnitPrice = p.UnitPrice,
+            CreatedAt = p.CreatedAt,
             Active = p.Active!.Value
         });
 
@@ -20,9 +20,9 @@
                 Id = product.Id,
                 Code = product.Code,
                 Name = product.Name,
-                Description = product.Description,
                 Quantity = product.Quantity,
                 UnitPrice = product.UnitPrice,
+                CreatedAt = product.CreatedAt,
                 Active = product.Active!.Value
             };
     }

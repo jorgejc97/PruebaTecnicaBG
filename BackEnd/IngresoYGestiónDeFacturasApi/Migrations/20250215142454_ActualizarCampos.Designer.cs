@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace IngresoYGestiónDeFacturasApi.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250212180453_RelacionTablas")]
-    partial class RelacionTablas
+    [Migration("20250215142454_ActualizarCampos")]
+    partial class ActualizarCampos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -90,10 +90,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.Property<bool?>("Active")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Code")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
@@ -120,6 +116,9 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("Number")
+                        .HasColumnType("bigint");
 
                     b.Property<Guid>("PaymentMethodId")
                         .HasColumnType("uniqueidentifier");
@@ -306,10 +305,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("LastModified")

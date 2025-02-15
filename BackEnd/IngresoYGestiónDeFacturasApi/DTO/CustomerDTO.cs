@@ -9,7 +9,7 @@
         public string Phone { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string Address { get; set; } = default!;
-        public DateTime? CreatedAt { get; set; } = default!;
-        public bool Active { get; set; } = default!;
+        public DateTime? CreatedAt { get; set; }
+        public bool? Active { get; set; }
     }
 }

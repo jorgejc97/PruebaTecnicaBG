@@ -25,163 +25,6 @@ import {
 import { Product } from "../interface";
 import { BasePage } from "../template";
 
-const users = [
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    code: "A001",
-    name: "Producto 1",
-    quantity: 10,
-    unitPrice: 15.5,
-    active: true,
-    createdAt: "2025-02-15T10:00:00Z",
-  },
-  {
-    id: "4fa85f64-5717-4562-b3fc-2c963f66afa7",
-    code: "A002",
-    name: "Producto 2",
-    quantity: 20,
-    unitPrice: 12.0,
-    active: true,
-    createdAt: "2025-02-15T11:00:00Z",
-  },
-  {
-    id: "5fa85f64-5717-4562-b3fc-2c963f66afa8",
-    code: "A003",
-    name: "Producto 3",
-    quantity: 50,
-    unitPrice: 7.8,
-    active: true,
-    createdAt: "2025-02-15T12:00:00Z",
-  },
-  {
-    id: "6fa85f64-5717-4562-b3fc-2c963f66afa9",
-    code: "A004",
-    name: "Producto 4",
-    quantity: 100,
-    unitPrice: 3.0,
-    active: true,
-    createdAt: "2025-02-15T13:00:00Z",
-  },
-  {
-    id: "7fa85f64-5717-4562-b3fc-2c963f66afaa",
-    code: "A005",
-    name: "Producto 5",
-    quantity: 30,
-    unitPrice: 10.5,
-    active: true,
-    createdAt: "2025-02-15T14:00:00Z",
-  },
-  {
-    id: "8fa85f64-5717-4562-b3fc-2c963f66afab",
-    code: "A006",
-    name: "Producto 6",
-    quantity: 15,
-    unitPrice: 9.5,
-    active: true,
-    createdAt: "2025-02-15T15:00:00Z",
-  },
-  {
-    id: "9fa85f64-5717-4562-b3fc-2c963f66afac",
-    code: "A007",
-    name: "Producto 7",
-    quantity: 25,
-    unitPrice: 11.2,
-    active: true,
-    createdAt: "2025-02-15T16:00:00Z",
-  },
-  {
-    id: "afa85f64-5717-4562-b3fc-2c963f66afad",
-    code: "A008",
-    name: "Producto 8",
-    quantity: 60,
-    unitPrice: 5.6,
-    active: true,
-    createdAt: "2025-02-15T17:00:00Z",
-  },
-  {
-    id: "bfa85f64-5717-4562-b3fc-2c963f66afae",
-    code: "A009",
-    name: "Producto 9",
-    quantity: 80,
-    unitPrice: 14.3,
-    active: true,
-    createdAt: "2025-02-15T18:00:00Z",
-  },
-  {
-    id: "cfa85f64-5717-4562-b3fc-2c963f66afaf",
-    code: "A010",
-    name: "Producto 10",
-    quantity: 120,
-    unitPrice: 8.0,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-
-  {
-    id: "6fa85f64-5717-4562-b3fc-2c963f66afa9",
-    code: "A004",
-    name: "Producto 4",
-    quantity: 100,
-    unitPrice: 3.0,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-  {
-    id: "7fa85f64-5717-4562-b3fc-2c963f66afaa",
-    code: "A005",
-    name: "Producto 5",
-    quantity: 30,
-    unitPrice: 10.5,
-    createdAt: "2025-02-15T19:00:00Z",
-    active: true,
-  },
-  {
-    id: "8fa85f64-5717-4562-b3fc-2c963f66afab",
-    code: "A006",
-    name: "Producto 6",
-    quantity: 15,
-    unitPrice: 9.5,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-  {
-    id: "9fa85f64-5717-4562-b3fc-2c963f66afac",
-    code: "A007",
-    name: "Producto 7",
-    quantity: 25,
-    unitPrice: 11.2,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-  {
-    id: "afa85f64-5717-4562-b3fc-2c963f66afad",
-    code: "A008",
-    name: "Producto 8",
-    quantity: 60,
-    unitPrice: 5.6,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-  {
-    id: "bfa85f64-5717-4562-b3fc-2c963f66afae",
-    code: "A009",
-    name: "Producto 9",
-    quantity: 80,
-    unitPrice: 14.3,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-  {
-    id: "cfa85f64-5717-4562-b3fc-2c963f66afaf",
-    code: "A010",
-    name: "Producto 10",
-    quantity: 120,
-    unitPrice: 8.0,
-    active: true,
-    createdAt: "2025-02-15T19:00:00Z",
-  },
-];
-
 export const ProductsPage = () => {
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
@@ -189,7 +32,7 @@ export const ProductsPage = () => {
   const [fetchGetProducts, { isLoading }] = useLazyGetProductsQuery();
   const [fetchDeleteProduct] = useDeleteProductMutation();
   const [filter, setFilter] = useState("");
-  const [filteredProducts, setFilteredProducts] = useState(users);
+  const [filteredProducts, setFilteredProducts] = useState(products);
   const [page, setPage] = useState(0);
 
   const onPressDeleteProduct = async (product: Product) => {
@@ -217,14 +60,14 @@ export const ProductsPage = () => {
     const filterValue = event.target.value;
     setFilter(filterValue);
     if (filterValue) {
-      const filtered = users.filter(
+      const filtered = products.filter(
         (product) =>
           product.name.toLowerCase().includes(filterValue.toLowerCase()) ||
           product.code.toLowerCase().includes(filterValue.toLowerCase())
       );
       setFilteredProducts(filtered);
     } else {
-      setFilteredProducts(users);
+      setFilteredProducts(products);
     }
   };
 
@@ -379,7 +222,9 @@ export const ProductsPage = () => {
                             <TableCell>{product.quantity}</TableCell>
                             <TableCell>{product.unitPrice}</TableCell>
                             <TableCell>
-                              {new Date(product.createdAt).toLocaleDateString()}
+                              {new Date(
+                                product.createdAt!
+                              ).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
                               {product.active ? "Activo" : "Inactivo"}

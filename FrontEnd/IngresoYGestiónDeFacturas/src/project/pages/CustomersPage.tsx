@@ -25,173 +25,6 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import { CustomerDialogAdd, CustomerDialogEdit } from "../dialog";
 
-const users = [
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa1",
-    identification: "1234567890",
-    name: "Juan",
-    lastName: "Pérez",
-    phone: "1234567890",
-    email: "juan@example.com",
-    address: "Calle 123",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa2",
-    identification: "0987654321",
-    name: "María",
-    lastName: "López",
-    phone: "0987654321",
-    email: "maria@example.com",
-    address: "Avenida 456",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa3",
-    identification: "1122334455",
-    name: "Carlos",
-    lastName: "Gómez",
-    phone: "1122334455",
-    email: "carlos@example.com",
-    address: "Carrera 789",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa4",
-    identification: "2233445566",
-    name: "Ana",
-    lastName: "Martínez",
-    phone: "2233445566",
-    email: "ana@example.com",
-    address: "Diagonal 987",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa5",
-    identification: "3344556677",
-    name: "Luis",
-    lastName: "Hernández",
-    phone: "3344556677",
-    email: "luis@example.com",
-    address: "Calle 741",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    identification: "4455667788",
-    name: "Elena",
-    lastName: "García",
-    phone: "4455667788",
-    email: "elena@example.com",
-    address: "Avenida 159",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa7",
-    identification: "5566778899",
-    name: "Pedro",
-    lastName: "Ramírez",
-    phone: "5566778899",
-    email: "pedro@example.com",
-    address: "Carrera 357",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa8",
-    identification: "6677889900",
-    name: "Sofía",
-    lastName: "Díaz",
-    phone: "6677889900",
-    email: "sofia@example.com",
-    address: "Diagonal 258",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afa9",
-    identification: "7788990011",
-    name: "Daniel",
-    lastName: "Torres",
-    phone: "7788990011",
-    email: "daniel@example.com",
-    address: "Calle 654",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afaa",
-    identification: "8899001122",
-    name: "Laura",
-    lastName: "Fernández",
-    phone: "8899001122",
-    email: "laura@example.com",
-    address: "Avenida 357",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afb1",
-    identification: "9900112233",
-    name: "Miguel",
-    lastName: "Ortiz",
-    phone: "9900112233",
-    email: "miguel@example.com",
-    address: "Calle 852",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afb2",
-    identification: "1100223344",
-    name: "Gabriela",
-    lastName: "Rojas",
-    phone: "1100223344",
-    email: "gabriela@example.com",
-    address: "Avenida 741",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afb3",
-    identification: "2200334455",
-    name: "Fernando",
-    lastName: "Castro",
-    phone: "2200334455",
-    email: "fernando@example.com",
-    address: "Carrera 123",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afb4",
-    identification: "3300445566",
-    name: "Patricia",
-    lastName: "Suárez",
-    phone: "3300445566",
-    email: "patricia@example.com",
-    address: "Diagonal 654",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-  {
-    id: "3fa85f64-5717-4562-b3fc-2c963f66afb5",
-    identification: "4400556677",
-    name: "Ricardo",
-    lastName: "Paredes",
-    phone: "4400556677",
-    email: "ricardo@example.com",
-    address: "Calle 369",
-    createdAt: "2025-02-15T01:59:44.999Z",
-    active: true,
-  },
-];
 export const CustomersPage = () => {
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
@@ -199,7 +32,7 @@ export const CustomersPage = () => {
   const [fetchGetCustomers, { isLoading }] = useLazyGetCustomersQuery();
   const [fetchDeleteCustomer] = useDeleteCustomerMutation();
   const [filter, setFilter] = useState("");
-  const [filteredCustomers, setFilteredCustomers] = useState(users);
+  const [filteredCustomers, setFilteredCustomers] = useState(customers);
   const [page, setPage] = useState(0);
 
   const onPressDeleteCustomer = async (customer: Customer) => {
@@ -227,14 +60,14 @@ export const CustomersPage = () => {
     const filterValue = event.target.value;
     setFilter(filterValue);
     if (filterValue) {
-      const filtered = users.filter(
+      const filtered = customers.filter(
         (customer) =>
           customer.name.toLowerCase().includes(filterValue.toLowerCase()) ||
           customer.identification.includes(filterValue)
       );
       setFilteredCustomers(filtered);
     } else {
-      setFilteredCustomers(users);
+      setFilteredCustomers(customers);
     }
   };
   return (
@@ -396,7 +229,7 @@ export const CustomersPage = () => {
                             <TableCell>{customer.address}</TableCell>
                             <TableCell>
                               {new Date(
-                                customer.createdAt
+                                customer.createdAt!
                               ).toLocaleDateString()}
                             </TableCell>
                             <TableCell>

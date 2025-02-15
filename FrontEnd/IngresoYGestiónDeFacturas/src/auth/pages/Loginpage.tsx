@@ -18,17 +18,17 @@ export const LoginPage = () => {
   const [fetchLogin, { isLoading }] = usePostLoginMutation();
 
   const {
-    formState: { email, password },
+    formState: { userName, password },
     onChange,
     isFormValid,
     errors,
   } = useForm<LoginInfo>(
     {
-      email: user,
+      userName: user,
       password: pass,
     },
     {
-      email: [(value) => value.length > 2, "Ingrese un usuario válido"],
+      userName: [(value) => value.length > 2, "Ingrese un usuario válido"],
       password: [
         (value) => value.length >= 6,
         "El password debe tener más de 6 letras.",
@@ -38,7 +38,7 @@ export const LoginPage = () => {
 
   const onPressLogin = async () => {
     await fetchLogin({
-      email,
+      userName,
       password,
     })
       .unwrap()
@@ -56,14 +56,14 @@ export const LoginPage = () => {
           <Grid item xs={12}>
             <TextField
               disabled={false}
-              label="Correo"
-              type="email"
-              placeholder="correo@correo.com"
+              label="Usuario"
+              type="userName"
+              placeholder="admin"
               fullWidth
-              value={email}
-              onChange={({ target: { value } }) => onChange("email", value)}
-              error={!!errors.email}
-              helperText={errors.email}
+              value={userName}
+              onChange={({ target: { value } }) => onChange("userName", value)}
+              error={!!errors.userName}
+              helperText={errors.userName}
             />
           </Grid>
 
