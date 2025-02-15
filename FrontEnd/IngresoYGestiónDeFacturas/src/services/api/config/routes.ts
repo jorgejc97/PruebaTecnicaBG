@@ -1,7 +1,7 @@
 // routes.ts
 
 //export const BASE_URL: string = "https://localhost:7107";
-export const BASE_URL: string = "https://173d-45-4-202-142.ngrok-free.app";
+export const BASE_URL: string = "https://2137-45-4-202-142.ngrok-free.app";
 
 export const BASE_API: string = "/api";
 export const LOGIN_BASE_URL = "/login";

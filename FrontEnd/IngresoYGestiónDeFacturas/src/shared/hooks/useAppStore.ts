@@ -4,7 +4,10 @@ import { AppDispatch, RootState } from "..";
 export const useAppStore = () => {
   //*Auth
   const auth = useSelector((store: RootState) => store.auth);
+  const seller = useSelector((store: RootState) => store.seller);
+  const customer = useSelector((store: RootState) => store.customer);
+  const product = useSelector((store: RootState) => store.product);
 
   const dispatch = useDispatch<AppDispatch>();
-  return { auth, dispatch };
+  return { auth, seller, customer, product, dispatch };
 };
