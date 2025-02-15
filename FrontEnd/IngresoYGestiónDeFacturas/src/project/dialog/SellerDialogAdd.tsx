@@ -35,13 +35,17 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
     },
     {
       identification: [
-        (value) => value.length > 2,
+        (value) => value.length >= 10,
         "Ingrese una identificación válida",
       ],
       name: [(value) => value.length > 2, "Ingrese un nombre válido"],
       lastName: [(value) => value.length > 2, "Ingrese un apellido válido"],
-      phone: [(value) => value.length > 2, "Ingrese un teléfono válido"],
-      email: [(value) => value.length > 2, "Ingrese un email válido"],
+      phone: [(value) => value.length >= 10, "Ingrese un teléfono válido"],
+      email: [
+        (value) =>
+          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value),
+        "Ingrese un correo válido",
+      ],
       address: [(value) => value.length > 2, "Ingrese una direccion válida"],
     }
   );
@@ -72,9 +76,11 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
           type="text"
           fullWidth
           value={formState.identification}
-          onChange={({ target: { value } }) =>
-            onChange("identification", value)
-          }
+          onChange={({ target: { value } }) => {
+            const identificationRegex = /^\d{0,10}$/;
+            identificationRegex.test(value) &&
+              onChange("identification", value);
+          }}
           error={!!errors.identification}
           helperText={errors.identification}
         />
@@ -106,10 +112,13 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
           label="Teléfono"
           type="text"
           fullWidth
-          value={formState.name}
-          onChange={({ target: { value } }) => onChange("name", value)}
-          error={!!errors.name}
-          helperText={errors.name}
+          value={formState.phone}
+          onChange={({ target: { value } }) => {
+            const phoneRegex = /^\d{0,10}$/;
+            phoneRegex.test(value) && onChange("phone", value);
+          }}
+          error={!!errors.phone}
+          helperText={errors.phone}
         />
         <TextField
           margin="dense"

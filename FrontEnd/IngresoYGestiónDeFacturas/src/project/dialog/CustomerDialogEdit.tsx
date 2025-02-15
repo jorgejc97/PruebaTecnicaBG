@@ -13,20 +13,23 @@ import {
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
 import { useEffect } from "react";
-import { Seller } from "../interface";
-import { useLazyGetSellersQuery, usePutSellerMutation } from "../../services";
-import { useSellerStore } from "../../shared";
+import { Customer } from "../interface";
+import {
+  useLazyGetCustomersQuery,
+  usePutCustomerMutation,
+} from "../../services";
+import { useCustomerStore } from "../../shared";
 
 interface Props {
   open: boolean;
   onClose: () => void;
 }
 
-export const SellerDialogEdit = ({ open = false, onClose }: Props) => {
-  const { activeSeller, onSetSellers } = useSellerStore();
+export const CustomerDialogEdit = ({ open = false, onClose }: Props) => {
+  const { activeCustomer, onSetCustomers } = useCustomerStore();
 
   const { formState, onChange, isFormValid, errors, setFormState } =
-    useForm<Seller>(
+    useForm<Customer>(
       {
         id: null,
         identification: "",
@@ -55,15 +58,15 @@ export const SellerDialogEdit = ({ open = false, onClose }: Props) => {
       }
     );
 
-  const [fetchPutSeller, { isLoading }] = usePutSellerMutation();
-  const [fetchGetSellers, { isLoading: isLoadingSellers }] =
-    useLazyGetSellersQuery();
+  const [fetchPutCustomer, { isLoading }] = usePutCustomerMutation();
+  const [fetchGetCustomers, { isLoading: isLoadingCustomers }] =
+    useLazyGetCustomersQuery();
 
   const onPressSave = async () => {
     console.log(JSON.stringify(formState));
-    return await fetchPutSeller(formState)
+    return await fetchPutCustomer(formState)
       .unwrap()
-      .then(async () => await fetchGetSellers().unwrap().then(onSetSellers))
+      .then(async () => await fetchGetCustomers().unwrap().then(onSetCustomers))
       .catch((error) => {
         Swal.fire("Error", error?.data?.detail ?? "Ocurrió un error", "error");
         throw error;
@@ -71,12 +74,12 @@ export const SellerDialogEdit = ({ open = false, onClose }: Props) => {
   };
 
   useEffect(() => {
-    setFormState(activeSeller);
-  }, [activeSeller, open]);
+    setFormState(activeCustomer);
+  }, [activeCustomer, open]);
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Editar Vendedor</DialogTitle>
+      <DialogTitle>Editar Cliente</DialogTitle>
       <DialogContent>
         <TextField
           autoFocus
@@ -170,7 +173,7 @@ export const SellerDialogEdit = ({ open = false, onClose }: Props) => {
         <Button
           onClick={onClose}
           color="error"
-          disabled={isLoading || isLoadingSellers}
+          disabled={isLoading || isLoadingCustomers}
         >
           Cancelar
         </Button>
@@ -179,15 +182,15 @@ export const SellerDialogEdit = ({ open = false, onClose }: Props) => {
             await onPressSave()
               .then(() => {
                 Swal.fire({
-                  title: "Vendedor actualizado",
-                  text: "Vendedor actualizado correctamente",
+                  title: "Cliente actualizado",
+                  text: "Cliente actualizado correctamente",
                   icon: "success",
                   confirmButtonColor: "#3085d6",
                 });
               })
               .finally(() => onClose());
           }}
-          disabled={!isFormValid() || isLoading || isLoadingSellers}
+          disabled={!isFormValid() || isLoading || isLoadingCustomers}
           color="primary"
         >
           Guardar
