@@ -1,8 +1,16 @@
 import { useEffect, useState } from "react";
-import { useCustomerStore } from "../../shared";
+import {
+  useCustomerStore,
+  useInvoiceStore,
+  useProductStore,
+  useSellerStore,
+} from "../../shared";
 import {
   useDeleteCustomerMutation,
   useLazyGetCustomersQuery,
+  useLazyGetInvoicesQuery,
+  useLazyGetProductsQuery,
+  useLazyGetSellersQuery,
 } from "../../services";
 import { Customer } from "../interface";
 import Swal from "sweetalert2";
@@ -26,6 +34,12 @@ import { Delete, Edit } from "@mui/icons-material";
 import { CustomerDialogAdd, CustomerDialogEdit } from "../dialog";
 
 export const CustomersPage = () => {
+  const [fetchGetInvoices] = useLazyGetInvoicesQuery();
+  const [fetchGetSellers] = useLazyGetSellersQuery();
+  const [fetchGetProducts] = useLazyGetProductsQuery();
+  const { onSetInvoices } = useInvoiceStore();
+  const { onSetProducts } = useProductStore();
+  const { onSetSellers } = useSellerStore();
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
   const { onSetActiveCustomer, customers, onSetCustomers } = useCustomerStore();
@@ -68,7 +82,12 @@ export const CustomersPage = () => {
   };
 
   useEffect(() => {
-    fetchGetCustomers().unwrap().then(onSetCustomers);
+    Promise.all([
+      fetchGetCustomers().unwrap().then(onSetCustomers),
+      fetchGetSellers().unwrap().then(onSetSellers),
+      fetchGetProducts().unwrap().then(onSetProducts),
+      fetchGetInvoices().unwrap().then(onSetInvoices),
+    ]);
   }, []);
 
   useEffect(() => {

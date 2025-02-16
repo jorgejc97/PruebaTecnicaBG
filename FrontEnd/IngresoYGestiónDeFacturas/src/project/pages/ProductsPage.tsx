@@ -17,15 +17,29 @@ import {
 import { useEffect, useState } from "react";
 import { ProductDialogAdd, ProductDialogEdit } from "../dialog";
 import Swal from "sweetalert2";
-import { useProductStore } from "../../shared";
+import {
+  useCustomerStore,
+  useInvoiceStore,
+  useProductStore,
+  useSellerStore,
+} from "../../shared";
 import {
   useDeleteProductMutation,
+  useLazyGetCustomersQuery,
+  useLazyGetInvoicesQuery,
   useLazyGetProductsQuery,
+  useLazyGetSellersQuery,
 } from "../../services";
 import { Product } from "../interface";
 import { BasePage } from "../template";
 
 export const ProductsPage = () => {
+  const [fetchGetInvoices] = useLazyGetInvoicesQuery();
+  const [fetchGetSellers] = useLazyGetSellersQuery();
+  const [fetchGetCustomers] = useLazyGetCustomersQuery();
+  const { onSetCustomers } = useCustomerStore();
+  const { onSetInvoices } = useInvoiceStore();
+  const { onSetSellers } = useSellerStore();
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
   const { onSetActiveProduct, products, onSetProducts } = useProductStore();
@@ -57,7 +71,12 @@ export const ProductsPage = () => {
   }, [products]);
 
   useEffect(() => {
-    fetchGetProducts().unwrap().then(onSetProducts);
+    Promise.all([
+      fetchGetCustomers().unwrap().then(onSetCustomers),
+      fetchGetSellers().unwrap().then(onSetSellers),
+      fetchGetProducts().unwrap().then(onSetProducts),
+      fetchGetInvoices().unwrap().then(onSetInvoices),
+    ]);
   }, []);
 
   const handleFilterChange = (event: any) => {

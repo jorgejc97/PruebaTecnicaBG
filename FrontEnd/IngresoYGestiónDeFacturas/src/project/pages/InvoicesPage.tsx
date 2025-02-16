@@ -20,21 +20,32 @@ import Swal from "sweetalert2";
 import {
   useCustomerStore,
   useInvoiceStore,
+  useProductStore,
   useSellerStore,
 } from "../../shared";
 import {
   useDeleteInvoiceMutation,
+  useLazyGetCustomersQuery,
   useLazyGetInvoicesQuery,
+  useLazyGetProductsQuery,
+  useLazyGetSellersQuery,
 } from "../../services";
 import { Facturas, Invoice } from "../interface";
 import { BasePage } from "../template";
 import { InvoiceDialogAdd } from "../dialog";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import { InvoicePdfGenerator } from "../components";
 
 export const InvoicesPage = () => {
+  const [fetchGetSellers] = useLazyGetSellersQuery();
+  const [fetchGetProducts] = useLazyGetProductsQuery();
+  const [fetchGetCustomers] = useLazyGetCustomersQuery();
+  const { onSetCustomers } = useCustomerStore();
+  const { onSetSellers } = useSellerStore();
   const { customers } = useCustomerStore();
-  //const { products, onSetProducts } = useProductStore();
+  const { products, onSetProducts } = useProductStore();
   const { sellers } = useSellerStore();
-  const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
   const { onSetActiveInvoice, invoices, onSetInvoices } = useInvoiceStore();
   const [fetchGetInvoices, { isLoading }] = useLazyGetInvoicesQuery();
@@ -42,6 +53,7 @@ export const InvoicesPage = () => {
   const [filter, setFilter] = useState("");
   const [filteredInvoices, setFilteredInvoices] = useState(Facturas);
   const [page, setPage] = useState(0);
+  const { viewPDF, downloadPDF } = InvoicePdfGenerator();
 
   const onPressDeleteInvoice = async (invoice: Invoice) => {
     await fetchDeleteInvoice(invoice.id ?? "")
@@ -69,6 +81,7 @@ export const InvoicesPage = () => {
           invoice.number.toString().includes(filterValue) ||
           new Date(invoice.createdAt!)
             .toLocaleDateString()
+            .toLowerCase()
             .includes(filterValue.toLowerCase()) ||
           invoice.total.toString().includes(filterValue)
       );
@@ -79,12 +92,17 @@ export const InvoicesPage = () => {
   };
 
   useEffect(() => {
-    fetchGetInvoices().unwrap().then(onSetInvoices);
+    Promise.all([
+      fetchGetCustomers().unwrap().then(onSetCustomers),
+      fetchGetSellers().unwrap().then(onSetSellers),
+      fetchGetProducts().unwrap().then(onSetProducts),
+      fetchGetInvoices().unwrap().then(onSetInvoices),
+    ]);
   }, []);
 
-  useEffect(() => {
+  /*  useEffect(() => {
     setFilteredInvoices(invoices);
-  }, [invoices]);
+  }, [invoices]); */
 
   return (
     <BasePage>
@@ -237,7 +255,6 @@ export const InvoicesPage = () => {
                               ).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                              {" "}
                               {customers.find(
                                 (customer) => customer.id === invoice.customerId
                               )?.name || "Desconocido"}
@@ -260,10 +277,7 @@ export const InvoicesPage = () => {
                                     color: "white",
                                   },
                                 }}
-                                onClick={() => {
-                                  onSetActiveInvoice(invoice);
-                                  setisEditVisible(true);
-                                }}
+                                onClick={viewPDF}
                               >
                                 <Edit />
                               </IconButton>
@@ -327,10 +341,6 @@ export const InvoicesPage = () => {
           onSave={() => {}}
           onCancel={() => setisAddVisible(false)}
         />
-        {/* <InvoiceDialogEdit
-          open={isEditVisible}
-          onClose={() => setisEditVisible(false)}
-        /> */}
       </Grid>
     </BasePage>
   );

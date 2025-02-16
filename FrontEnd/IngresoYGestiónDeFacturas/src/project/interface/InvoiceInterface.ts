@@ -20,6 +20,42 @@ export interface InvoiceDetail {
   unitPrice: number;
   total: number;
 }
+export const factura: Invoice = {
+  id: "a1b2c3d4-5678-9012-3456-7890abcdef01",
+  number: 6996,
+  companyId: "006bb305-35b4-4f76-8606-eb767e658ef0",
+  customerId: "db2dba67-8e6c-452c-3449-08dd4e16e88a",
+  sellerId: "b0cc5e57-e655-40f4-dea4-08dd4e16e86b",
+  paymentMethod: "Tarjeta de Crédito",
+  paymentStatus: "Pagado",
+  subTotal: 168.71,
+  iva: 69.77,
+  total: 358,
+  createdAt: null,
+  invoiceDetail: [
+    {
+      id: "abcd1234-5678-9012-3456-7890abcdef02",
+      productId: "a370780f-eb0c-4bba-7d62-08dd4e16e89e",
+      quantity: 2,
+      unitPrice: 75,
+      total: 150,
+    },
+    {
+      id: "efgh5678-9012-3456-7890-abcdefabcdef",
+      productId: "831a953c-a0da-498a-7d61-08dd4e16e89e",
+      quantity: 1,
+      unitPrice: 99,
+      total: 99,
+    },
+    {
+      id: "mnop3456-7890-abcdefabcdefabcdef",
+      productId: "1b865efc-829a-4c72-7d60-08dd4e16e89e",
+      quantity: 3,
+      unitPrice: 106,
+      total: 320,
+    },
+  ],
+};
 
 export const Facturas: Invoice[] = [
   {

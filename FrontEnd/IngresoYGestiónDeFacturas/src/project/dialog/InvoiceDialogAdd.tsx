@@ -18,6 +18,7 @@ import {
   Paper,
   TableBody,
   IconButton,
+  Autocomplete,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -27,7 +28,13 @@ import {
   useLazyGetInvoicesQuery,
   usePostInvoiceMutation,
 } from "../../services";
-import { useInvoiceStore, useProductStore } from "../../shared";
+import {
+  useAuthStore,
+  useCustomerStore,
+  useInvoiceStore,
+  useProductStore,
+  useSellerStore,
+} from "../../shared";
 import { Delete } from "@mui/icons-material";
 
 interface Props {
@@ -38,14 +45,19 @@ interface Props {
 }
 
 export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
-  const { products } = useProductStore();
+  const {
+    jwtInfo: { userInfo },
+  } = useAuthStore();
+  const { customers } = useCustomerStore();
+  const { products, onSetProducts } = useProductStore();
+  const { sellers } = useSellerStore();
   const { onSetInvoices } = useInvoiceStore();
   const { formState, onChange, isFormValid, errors, resetForm } =
     useForm<Invoice>(
       {
         id: null,
-        number: 0,
-        companyId: "",
+        number: Math.floor(Math.random() * 10000),
+        companyId: userInfo.id,
         customerId: "",
         sellerId: "",
         paymentMethod: "",
@@ -92,106 +104,191 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
     !open && resetForm();
   }, [open]);
 
+  useEffect(() => {
+    console.log(JSON.stringify(formState));
+  }, [formState]);
+
   return (
     <Dialog fullWidth={true} maxWidth={"xl"} open={open} onClose={onClose}>
       <DialogTitle>Agregar Factura</DialogTitle>
       <DialogContent>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          <Grid item xs={4}>
+        <Grid
+          container
+          rowSpacing={2}
+          columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <Grid item xs={2.5}>
+            <Autocomplete
+              disablePortal
+              options={customers}
+              getOptionLabel={(customer) =>
+                `${customer.name} ${customer.lastName}`
+              }
+              onChange={(_, newValue) =>
+                onChange("customerId", newValue ? newValue.id! : "")
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Cliente" />
+              )}
+            />
+          </Grid>
+          <Grid item xs={2}>
             <TextField
               autoFocus
+              disabled={true}
               margin="dense"
               name="identificación"
               label="Identificación"
               type="text"
               fullWidth
-              value={formState.customerId}
+              value={
+                customers.find(
+                  (customer) => customer.id === formState.customerId
+                )?.identification || ""
+              }
               onChange={({ target: { value } }) =>
                 onChange("customerId", value)
               }
-              error={!!errors.customerId}
-              helperText={errors.customerId}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <TextField
+              autoFocus
+              disabled={true}
+              margin="dense"
+              name="Teléfono"
+              label="Teléfono"
+              type="text"
+              fullWidth
+              value={
+                customers.find(
+                  (customer) => customer.id === formState.customerId
+                )?.phone || ""
+              }
+              onChange={({ target: { value } }) =>
+                onChange("customerId", value)
+              }
+            />
+          </Grid>
+          <Grid item xs={2.6}>
+            <TextField
+              autoFocus
+              disabled={true}
+              margin="dense"
+              name="Coreeo"
+              label="Correo"
+              type="text"
+              fullWidth
+              value={
+                customers.find(
+                  (customer) => customer.id === formState.customerId
+                )?.email || ""
+              }
+              onChange={({ target: { value } }) =>
+                onChange("customerId", value)
+              }
+            />
+          </Grid>
+          <Grid item xs={2.9}>
+            <TextField
+              autoFocus
+              disabled={true}
+              margin="dense"
+              name="Dreccion"
+              label="Direccion"
+              type="text"
+              fullWidth
+              value={
+                customers.find(
+                  (customer) => customer.id === formState.customerId
+                )?.address || ""
+              }
+              onChange={({ target: { value } }) =>
+                onChange("customerId", value)
+              }
+            />
+          </Grid>
+
+          <Grid item xs={4}>
+            <Autocomplete
+              options={sellers}
+              getOptionLabel={(seller) => `${seller.name} ${seller.lastName}`}
+              onChange={(_, newValue) =>
+                onChange("sellerId", newValue ? newValue.id! : "")
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Vendedor" />
+              )}
             />
           </Grid>
           <Grid item xs={4}>
             <TextField
               autoFocus
+              disabled={true}
               margin="dense"
-              name="identificación"
-              label="Identificación"
+              name="Fecha"
+              label="Fecha"
               type="text"
               fullWidth
-              value={formState.customerId}
-              onChange={({ target: { value } }) =>
-                onChange("customerId", value)
-              }
-              error={!!errors.customerId}
-              helperText={errors.customerId}
+              value={new Date().toLocaleDateString()}
             />
           </Grid>
-          <Grid item xs={4}>
-            <TextField
-              autoFocus
-              margin="dense"
-              name="identificación"
-              label="Identificación"
-              type="text"
-              fullWidth
-              value={formState.customerId}
-              onChange={({ target: { value } }) =>
-                onChange("customerId", value)
-              }
-              error={!!errors.customerId}
-              helperText={errors.customerId}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Estado</InputLabel>
-              <Select
-                value={formState.companyId}
-                label="Estado"
-                onChange={({ target: { value } }) =>
-                  onChange("customerId", value)
-                }
-              >
-                <MenuItem value={"true"}>Activo</MenuItem>
-                <MenuItem value={"false"}>Inactivo</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Estado</InputLabel>
-              <Select
-                value={formState.customerId}
-                label="Estado"
-                onChange={({ target: { value } }) =>
-                  onChange("customerId", value)
-                }
-              >
-                <MenuItem value={"true"}>Activo</MenuItem>
-                <MenuItem value={"false"}>Inactivo</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl fullWidth margin="dense">
-              <InputLabel>Estado</InputLabel>
-              <Select
-                value={formState.customerId}
-                label="Estado"
-                onChange={({ target: { value } }) =>
-                  onChange("customerId", value)
-                }
-              >
-                <MenuItem value={"true"}>Activo</MenuItem>
-                <MenuItem value={"false"}>Inactivo</MenuItem>
-              </Select>
-            </FormControl>
+
+          <Grid
+            container
+            item
+            xs={4}
+            spacing={2}
+            direction={"row"}
+            alignItems={"center"}
+          >
+            <Grid item xs={7}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Metodo de Pago</InputLabel>
+                <Select
+                  value={formState.paymentMethod}
+                  label="Metodo de Pago"
+                  onChange={({ target: { value } }) =>
+                    onChange("paymentMethod", value)
+                  }
+                >
+                  <MenuItem value={"Efectivo"}>Efectivo</MenuItem>
+                  <MenuItem value={"Tarjeta de Crédito"}>
+                    Tarjeta de Crédito
+                  </MenuItem>
+                  <MenuItem value={"Transferencia Bancaria"}>
+                    Transferencia Bancaria
+                  </MenuItem>
+                  <MenuItem value={"Cheque"}>Cheque</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={5}>
+              <FormControl fullWidth margin="dense">
+                <InputLabel>Estado</InputLabel>
+                <Select
+                  value={formState.paymentStatus}
+                  label="Estado"
+                  onChange={({ target: { value } }) =>
+                    onChange("paymentStatus", value)
+                  }
+                >
+                  <MenuItem value={"Pagado"}>Pagado</MenuItem>
+                  <MenuItem value={"Pendiente"}>Pendiente</MenuItem>
+                  <MenuItem value={"Anulado"}>Anulado</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </Grid>
-        <Grid container alignContent={"center"} justifyContent={"center"}>
+        <Grid
+          container
+          marginTop={4}
+          alignContent={"center"}
+          justifyContent={"center"}
+        >
           <TableContainer component={Paper}>
             <Table>
               <TableHead>
@@ -318,22 +415,24 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                   <TableCell
                     colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
                   ></TableCell>
-                  <TableCell align="right">Subtotal</TableCell>
-                  <TableCell align="right">{"invoiceSubtotal"}</TableCell>
+                  <TableCell align="right">Subtotal $</TableCell>
+                  <TableCell align="right">{0}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
                     colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
                   ></TableCell>
-                  <TableCell align="right">{`IVA (${"15"})% ${"$"}`}</TableCell>
-                  <TableCell align="right">{"invoiceTaxes"}</TableCell>
+                  <TableCell align="right">{`IVA (${
+                    userInfo.iva
+                  })% ${"$"}`}</TableCell>
+                  <TableCell align="right">{0.0}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
                     colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
                   ></TableCell>
-                  <TableCell align="right">Total</TableCell>
-                  <TableCell align="right">{"invoiceTotal"}</TableCell>
+                  <TableCell align="right">Total $</TableCell>
+                  <TableCell align="right">{0.0}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>

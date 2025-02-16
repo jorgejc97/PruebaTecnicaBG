@@ -17,19 +17,33 @@ import {
 import { useEffect, useState } from "react";
 import { SellerDialogAdd, SellerDialogEdit } from "../dialog";
 import Swal from "sweetalert2";
-import { useSellerStore } from "../../shared";
+import {
+  useCustomerStore,
+  useInvoiceStore,
+  useProductStore,
+  useSellerStore,
+} from "../../shared";
 import {
   useDeleteSellerMutation,
+  useLazyGetCustomersQuery,
+  useLazyGetInvoicesQuery,
+  useLazyGetProductsQuery,
   useLazyGetSellersQuery,
 } from "../../services";
 import { Seller } from "../interface";
 import { BasePage } from "../template";
 
 export const SellersPage = () => {
+  const [fetchGetInvoices] = useLazyGetInvoicesQuery();
+  const [fetchGetSellers, { isLoading }] = useLazyGetSellersQuery();
+  const [fetchGetProducts] = useLazyGetProductsQuery();
+  const [fetchGetCustomers] = useLazyGetCustomersQuery();
+  const { onSetCustomers } = useCustomerStore();
+  const { onSetInvoices } = useInvoiceStore();
+  const { onSetProducts } = useProductStore();
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
   const { onSetActiveSeller, sellers, onSetSellers } = useSellerStore();
-  const [fetchGetSellers, { isLoading }] = useLazyGetSellersQuery();
   const [fetchDeleteSeller] = useDeleteSellerMutation();
   const [filter, setFilter] = useState("");
   const [filteredSellers, setFilteredSellers] = useState(sellers);
@@ -68,7 +82,12 @@ export const SellersPage = () => {
   };
 
   useEffect(() => {
-    fetchGetSellers().unwrap().then(onSetSellers);
+    Promise.all([
+      fetchGetCustomers().unwrap().then(onSetCustomers),
+      fetchGetSellers().unwrap().then(onSetSellers),
+      fetchGetProducts().unwrap().then(onSetProducts),
+      fetchGetInvoices().unwrap().then(onSetInvoices),
+    ]);
   }, []);
 
   useEffect(() => {
