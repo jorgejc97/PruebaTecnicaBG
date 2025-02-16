@@ -1,4 +1,4 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Download, PictureAsPdf } from "@mui/icons-material";
 import {
   Button,
   Grid,
@@ -15,43 +15,30 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useState } from "react";
-//import { InvoiceDialogAdd, InvoiceDialogEdit } from "../dialog";
 import Swal from "sweetalert2";
 import {
   useCustomerStore,
   useInvoiceStore,
-  useProductStore,
   useSellerStore,
 } from "../../shared";
 import {
   useDeleteInvoiceMutation,
-  useLazyGetCustomersQuery,
   useLazyGetInvoicesQuery,
-  useLazyGetProductsQuery,
-  useLazyGetSellersQuery,
 } from "../../services";
-import { Facturas, Invoice } from "../interface";
 import { BasePage } from "../template";
 import { InvoiceDialogAdd } from "../dialog";
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
 import { InvoicePdfGenerator } from "../components";
+import { Invoice } from "../interface";
 
 export const InvoicesPage = () => {
-  const [fetchGetSellers] = useLazyGetSellersQuery();
-  const [fetchGetProducts] = useLazyGetProductsQuery();
-  const [fetchGetCustomers] = useLazyGetCustomersQuery();
-  const { onSetCustomers } = useCustomerStore();
-  const { onSetSellers } = useSellerStore();
   const { customers } = useCustomerStore();
-  const { products, onSetProducts } = useProductStore();
   const { sellers } = useSellerStore();
+  const { invoices, onSetInvoices } = useInvoiceStore();
   const [isAddVisible, setisAddVisible] = useState(false);
-  const { onSetActiveInvoice, invoices, onSetInvoices } = useInvoiceStore();
   const [fetchGetInvoices, { isLoading }] = useLazyGetInvoicesQuery();
   const [fetchDeleteInvoice] = useDeleteInvoiceMutation();
   const [filter, setFilter] = useState("");
-  const [filteredInvoices, setFilteredInvoices] = useState(Facturas);
+  const [filteredInvoices, setFilteredInvoices] = useState(invoices);
   const [page, setPage] = useState(0);
   const { viewPDF, downloadPDF } = InvoicePdfGenerator();
 
@@ -87,22 +74,17 @@ export const InvoicesPage = () => {
       );
       setFilteredInvoices(filtered);
     } else {
-      setFilteredInvoices(Facturas);
+      setFilteredInvoices(invoices);
     }
   };
 
   useEffect(() => {
-    Promise.all([
-      fetchGetCustomers().unwrap().then(onSetCustomers),
-      fetchGetSellers().unwrap().then(onSetSellers),
-      fetchGetProducts().unwrap().then(onSetProducts),
-      fetchGetInvoices().unwrap().then(onSetInvoices),
-    ]);
+    fetchGetInvoices().unwrap().then(onSetInvoices);
   }, []);
 
-  /*  useEffect(() => {
+  useEffect(() => {
     setFilteredInvoices(invoices);
-  }, [invoices]); */
+  }, [invoices]);
 
   return (
     <BasePage>
@@ -246,8 +228,8 @@ export const InvoicesPage = () => {
                     <TableBody>
                       {filteredInvoices
                         .slice(page * 10, page * 10 + 10)
-                        .map((invoice) => (
-                          <TableRow key={invoice.id}>
+                        .map((invoice, index) => (
+                          <TableRow key={index}>
                             <TableCell>{invoice.number}</TableCell>
                             <TableCell>
                               {new Date(
@@ -255,17 +237,31 @@ export const InvoicesPage = () => {
                               ).toLocaleDateString()}
                             </TableCell>
                             <TableCell>
-                              {customers.find(
-                                (customer) => customer.id === invoice.customerId
-                              )?.name || "Desconocido"}
+                              {`${
+                                customers.find(
+                                  (customer) =>
+                                    customer.id == invoice.customerId
+                                )?.name || "cliente"
+                              } ${
+                                customers.find(
+                                  (customer) =>
+                                    customer.id == invoice.customerId
+                                )?.lastName || ""
+                              }`}
                             </TableCell>
                             <TableCell>
-                              {sellers.find(
-                                (seller) => seller.id === invoice.customerId
-                              )?.name || "Desconocido"}
+                              {`${
+                                sellers.find(
+                                  (seller) => seller.id == invoice.sellerId
+                                )?.name || "vendedor"
+                              } ${
+                                sellers.find(
+                                  (seller) => seller.id == invoice.sellerId
+                                )?.lastName || ""
+                              }`}
                             </TableCell>
                             <TableCell>{invoice.paymentStatus}</TableCell>
-                            <TableCell>{invoice.total}</TableCell>
+                            <TableCell>{`$${invoice.total}`}</TableCell>
                             <TableCell>
                               <IconButton
                                 color="primary"
@@ -277,9 +273,26 @@ export const InvoicesPage = () => {
                                     color: "white",
                                   },
                                 }}
-                                onClick={viewPDF}
+                                onClick={() => downloadPDF(invoice)}
                               >
-                                <Edit />
+                                <Download />
+                              </IconButton>
+                              <IconButton
+                                color="primary"
+                                aria-label="edit"
+                                sx={{
+                                  borderRadius: "4px",
+                                  "&:hover": {
+                                    backgroundColor: "#1976d2",
+                                    color: "white",
+                                  },
+                                }}
+                                onClick={() => {
+                                  console.log(JSON.stringify(invoice, null, 3));
+                                  viewPDF(invoice);
+                                }}
+                              >
+                                <PictureAsPdf />
                               </IconButton>
                               <IconButton
                                 color="secondary"
@@ -333,7 +346,6 @@ export const InvoicesPage = () => {
             )}
           </Grid>
         </Grid>
-
         {/* Modales */}
         <InvoiceDialogAdd
           open={isAddVisible}

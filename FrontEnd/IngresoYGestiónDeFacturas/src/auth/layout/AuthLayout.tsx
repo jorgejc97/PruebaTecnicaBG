@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { Children } from "../../interfaces";
-import { Settings, VpnKey } from "@mui/icons-material";
+import { VpnKey } from "@mui/icons-material";
 
 interface Props extends Children {
   title: string;

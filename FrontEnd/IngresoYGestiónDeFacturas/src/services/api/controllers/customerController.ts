@@ -1,5 +1,5 @@
 import { Customer } from "../../../project";
-import { baseApiConfig, CUSTOMER_BASE_URL, SELLER_BASE_URL } from "../config";
+import { baseApiConfig, CUSTOMER_BASE_URL } from "../config";
 import { createApi } from "@reduxjs/toolkit/query/react";
 
 export const customerController = createApi({
@@ -27,7 +27,7 @@ export const customerController = createApi({
     }),
     deleteCustomer: build.mutation<void, string>({
       query: (id) => ({
-        url: `${SELLER_BASE_URL}/${id}`,
+        url: `${CUSTOMER_BASE_URL}/${id}`,
         method: "DELETE",
       }),
     }),

@@ -22,8 +22,8 @@ import {
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
-import { useEffect } from "react";
-import { Invoice } from "../interface";
+import { useEffect, useState } from "react";
+import { Invoice, InvoiceDetail } from "../interface";
 import {
   useLazyGetInvoicesQuery,
   usePostInvoiceMutation,
@@ -35,7 +35,7 @@ import {
   useProductStore,
   useSellerStore,
 } from "../../shared";
-import { Delete } from "@mui/icons-material";
+import { AddShoppingCart, Delete } from "@mui/icons-material";
 
 interface Props {
   open: boolean;
@@ -45,52 +45,115 @@ interface Props {
 }
 
 export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
+  const [fetchPostInvoice, { isLoading }] = usePostInvoiceMutation();
+  const [fetchGetInvoice, { isLoading: isLoadingInvoices }] =
+    useLazyGetInvoicesQuery();
   const {
     jwtInfo: { userInfo },
   } = useAuthStore();
   const { customers } = useCustomerStore();
-  const { products, onSetProducts } = useProductStore();
+  const { products } = useProductStore();
   const { sellers } = useSellerStore();
   const { onSetInvoices } = useInvoiceStore();
-  const { formState, onChange, isFormValid, errors, resetForm } =
-    useForm<Invoice>(
-      {
-        id: null,
-        number: Math.floor(Math.random() * 10000),
-        companyId: userInfo.id,
-        customerId: "",
-        sellerId: "",
-        paymentMethod: "",
-        paymentStatus: "",
-        subTotal: 0,
-        iva: 0,
-        total: 0,
-        createdAt: null,
-        invoiceDetail: [],
-      },
-      {
-        companyId: [
-          (value) => value.length >= 10,
-          "Ingrese una identificación válida",
-        ],
-        customerId: [(value) => value.length > 2, "Ingrese un nombre válido"],
-        sellerId: [(value) => value.length > 2, "Ingrese un apellido válido"],
-        paymentMethod: [
-          (value) => value.length >= 10,
-          "Ingrese un teléfono válido",
-        ],
-        paymentStatus: [
-          (value) => value.length >= 2,
-          "Ingrese un correo válido",
-        ],
+
+  const [invoiceDetail, setInvoiceDetail] = useState<InvoiceDetail>({
+    id: null,
+    invoiceId: null,
+    productId: "",
+    quantity: 0,
+    unitPrice: 0,
+    total: 0,
+  });
+
+  const ChangeInvoiceDetail = (field: string, value: string | number) => {
+    setInvoiceDetail((prev) => {
+      const updatedDetail = {
+        ...prev,
+        [field]: value,
+      };
+
+      if (field === "quantity" || field === "unitPrice") {
+        const total =
+          Number(updatedDetail.quantity) * Number(updatedDetail.unitPrice);
+        return {
+          ...updatedDetail,
+          total: Math.ceil(total * 100) / 100,
+        };
       }
+
+      return updatedDetail;
+    });
+  };
+
+  const saveInvoiceDetail = () => {
+    const prev = [...formState.invoiceDetails, invoiceDetail];
+
+    setInvoiceDetail({
+      id: null,
+      invoiceId: null,
+      productId: "",
+      quantity: 0,
+      unitPrice: 0,
+      total: 0,
+    });
+
+    const newSubtotal = prev.reduce((acc, item) => acc + Number(item.total), 0);
+    const roundedSubtotal = Math.ceil(newSubtotal * 100) / 100;
+    const newIva =
+      Math.ceil(roundedSubtotal * (userInfo.iva / 100) * 100) / 100;
+    const newTotal = Math.ceil((roundedSubtotal + newIva) * 100) / 100;
+
+    onChange("subTotal", roundedSubtotal);
+    onChange("iva", newIva);
+    onChange("total", newTotal);
+    onChange("invoiceDetails", prev);
+  };
+
+  const deleteInvoiceDetail = (index: number) => {
+    const updatedInvoiceDetails = formState.invoiceDetails.filter(
+      (_, idx) => idx !== index
     );
-  const [fetchPostInvoice, { isLoading }] = usePostInvoiceMutation();
-  const [fetchGetInvoice, { isLoading: isLoadingInvoices }] =
-    useLazyGetInvoicesQuery();
+
+    const newSubtotal = updatedInvoiceDetails.reduce(
+      (acc, item) => acc + Number(item.total),
+      0
+    );
+    const roundedSubtotal = Math.ceil(newSubtotal * 100) / 100;
+
+    const newIva =
+      Math.ceil(roundedSubtotal * (userInfo.iva / 100) * 100) / 100;
+    const newTotal = Math.ceil((roundedSubtotal + newIva) * 100) / 100;
+
+    onChange("subTotal", roundedSubtotal);
+    onChange("iva", newIva);
+    onChange("total", newTotal);
+    onChange("invoiceDetails", updatedInvoiceDetails);
+  };
+
+  const { formState, onChange, isFormValid, resetForm } = useForm<Invoice>(
+    {
+      id: null,
+      number: Math.floor(Math.random() * 10000),
+      companyId: userInfo.id,
+      customerId: "",
+      sellerId: "",
+      paymentMethod: "",
+      paymentStatus: "",
+      subTotal: 0,
+      iva: 0,
+      total: 0,
+      createdAt: null,
+      invoiceDetails: [],
+    },
+    {
+      customerId: [(value) => value != "", "Seleccione un Cliente"],
+      sellerId: [(value) => value != "", "Seleccione un Vendedor"],
+      paymentMethod: [(value) => value != "", "Metodo Pago Requerido"],
+      paymentStatus: [(value) => value != "", "Status Pago Requerido"],
+    }
+  );
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPostInvoice(formState)
       .unwrap()
       .then(async () => await fetchGetInvoice().unwrap().then(onSetInvoices))
@@ -114,7 +177,7 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
       <DialogContent>
         <Grid
           container
-          rowSpacing={2}
+          rowSpacing={1}
           columnSpacing={{ xs: 1, sm: 2, md: 3 }}
           alignItems={"center"}
           justifyContent={"center"}
@@ -282,6 +345,56 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
               </FormControl>
             </Grid>
           </Grid>
+          <Grid item xs={4}>
+            <Autocomplete
+              options={products}
+              getOptionLabel={(product) => product.name}
+              onChange={(_, newValue) => {
+                ChangeInvoiceDetail("productId", newValue ? newValue.id! : "");
+                ChangeInvoiceDetail(
+                  "unitPrice",
+                  newValue ? newValue.unitPrice : 0
+                );
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Producto" />
+              )}
+            />
+          </Grid>
+          <Grid item xs={4}>
+            <TextField
+              disabled={invoiceDetail.productId!.length > 4 ? false : true}
+              autoFocus
+              margin="dense"
+              name="Cantidad"
+              label="Cantidad"
+              type="text"
+              fullWidth
+              value={
+                invoiceDetail.quantity === 0 ? "0" : invoiceDetail.quantity
+              }
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                const regex = /^\d{0,4}$/;
+                regex.test(e.target.value) &&
+                  ChangeInvoiceDetail("quantity", Number(e.target.value));
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              disabled={
+                invoiceDetail.productId != "" && invoiceDetail.quantity != 0
+                  ? false
+                  : true
+              }
+              variant="contained"
+              fullWidth
+              type="submit"
+              onClick={saveInvoiceDetail}
+            >
+              <AddShoppingCart />
+            </Button>
+          </Grid>
         </Grid>
         <Grid
           container
@@ -341,20 +454,11 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                   <TableCell
                     align="right"
                     sx={{
-                      backgroundColor: "skyblue",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    Total
-                  </TableCell>
-
-                  <TableCell
-                    align="right"
-                    sx={{
+                      width: "4%",
                       backgroundColor: "skyblue",
                       fontWeight: "bold",
                       display:
-                        formState.invoiceDetail.length > 0
+                        formState.invoiceDetails.length > 0
                           ? "table-cell"
                           : "none",
                     }}
@@ -362,7 +466,7 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {formState.invoiceDetail.map((detail, index) => (
+                {formState.invoiceDetails.map((detail, index) => (
                   <TableRow key={index}>
                     <TableCell align="right">
                       {products.find(
@@ -375,21 +479,13 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                         (product) => product.id === detail.productId
                       )?.name || ""}
                     </TableCell>
-                    <TableCell align="right">
-                      {products.find(
-                        (product) => product.id === detail.productId
-                      )?.unitPrice || 0}
-                    </TableCell>
-                    <TableCell align="right">
-                      {products.find(
-                        (product) => product.id === detail.productId
-                      )?.unitPrice! * detail.quantity || 0}
-                    </TableCell>
-
+                    <TableCell align="right">{detail.unitPrice}</TableCell>
+                    <TableCell align="right">{detail.total}</TableCell>
                     <TableCell
+                      align="center"
                       sx={{
                         display:
-                          formState.invoiceDetail.length > 1
+                          formState.invoiceDetails.length >= 1
                             ? "table-cell"
                             : "none",
                       }}
@@ -404,7 +500,7 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                             color: "white",
                           },
                         }}
-                        onClick={undefined}
+                        onClick={() => deleteInvoiceDetail(index)}
                       >
                         <Delete />
                       </IconButton>
@@ -413,26 +509,26 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                 ))}
                 <TableRow>
                   <TableCell
-                    colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
+                    colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
                   <TableCell align="right">Subtotal $</TableCell>
-                  <TableCell align="right">{0}</TableCell>
+                  <TableCell align="right">{formState.subTotal}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
-                    colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
+                    colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
                   <TableCell align="right">{`IVA (${
                     userInfo.iva
                   })% ${"$"}`}</TableCell>
-                  <TableCell align="right">{0.0}</TableCell>
+                  <TableCell align="right">{formState.iva}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
-                    colSpan={formState.invoiceDetail.length > 0 ? 5 : 4}
+                    colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
                   <TableCell align="right">Total $</TableCell>
-                  <TableCell align="right">{0.0}</TableCell>
+                  <TableCell align="right">{formState.total}</TableCell>
                 </TableRow>
               </TableBody>
             </Table>
@@ -452,8 +548,8 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
             await onPressSave()
               .then(() => {
                 Swal.fire({
-                  title: "Cliente actualizado",
-                  text: "Cliente actualizado correctamente",
+                  title: "Factura Creada",
+                  text: "Factura Creada",
                   icon: "success",
                   confirmButtonColor: "#3085d6",
                 });

@@ -1,7 +1,6 @@
 import { Invoice } from "../interface";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import { factura } from "../interface/InvoiceInterface";
 import {
   useAuthStore,
   useCustomerStore,
@@ -17,9 +16,7 @@ export const InvoicePdfGenerator = () => {
   const { products } = useProductStore();
   const { sellers } = useSellerStore();
 
-  const invoice: Invoice = factura;
-
-  const generatePDF = () => {
+  const generatePDF = (invoiceParams: Invoice) => {
     const doc = new jsPDF();
 
     const img = "/logo.png";
@@ -40,7 +37,7 @@ export const InvoicePdfGenerator = () => {
     doc.text(`Email: ${userInfo.email}`, 83.5, 27);
 
     doc.setFontSize(15);
-    doc.text(`Factura N° ${invoice.number}`, 156, 15);
+    doc.text(`Factura N° ${invoiceParams.number}`, 156, 15);
 
     autoTable(doc, {
       startY: 50,
@@ -48,31 +45,35 @@ export const InvoicePdfGenerator = () => {
       body: [
         [
           `Identificación: ${
-            customers.find((customer) => customer.id === invoice.customerId)
-              ?.identification || ""
+            customers.find(
+              (customer) => customer.id == invoiceParams.customerId
+            )?.identification || ""
           }`,
         ],
         [
           `${
-            customers.find((customer) => customer.id === invoice.customerId)
-              ?.name || ""
+            customers.find(
+              (customer) => customer.id == invoiceParams.customerId
+            )?.name || ""
           } ${
-            customers.find((customer) => customer.id === invoice.customerId)
-              ?.lastName || ""
+            customers.find(
+              (customer) => customer.id == invoiceParams.customerId
+            )?.lastName || ""
           }`,
         ],
         [
           `Teléfono: ${
-            customers.find((customer) => customer.id === invoice.customerId)
-              ?.phone || ""
+            customers.find(
+              (customer) => customer.id == invoiceParams.customerId
+            )?.phone || ""
           }`,
         ],
         [
-          customers.find((customer) => customer.id === invoice.customerId)
+          customers.find((customer) => customer.id == invoiceParams.customerId)
             ?.email || "",
         ],
         [
-          customers.find((customer) => customer.id === invoice.customerId)
+          customers.find((customer) => customer.id == invoiceParams.customerId)
             ?.address || "",
         ],
       ],
@@ -91,22 +92,22 @@ export const InvoicePdfGenerator = () => {
       body: [
         [
           `${
-            sellers.find((seller) => seller.id === invoice.sellerId)?.name || ""
+            sellers.find((seller) => seller.id === invoiceParams.sellerId)
+              ?.name || ""
           } ${
-            sellers.find((seller) => seller.id === invoice.sellerId)
+            sellers.find((seller) => seller.id === invoiceParams.sellerId)
               ?.lastName || ""
           }`,
-          new Date().toLocaleDateString(),
-          invoice.paymentMethod,
+          new Date(invoiceParams.createdAt!).toLocaleDateString(),
+          invoiceParams.paymentMethod,
         ],
       ],
     });
 
-    // **Usar autoTable para generar la tabla**
     autoTable(doc, {
       startY: 130,
-      head: [["Code, Descripción", "Cantidad", "Precio Unitario", "Total"]],
-      body: invoice.invoiceDetail.map((detail) => [
+      head: [["Code", "Descripción", "Cantidad", "Precio Unitario", "Total"]],
+      body: invoiceParams.invoiceDetails.map((detail) => [
         products.find((product) => product.id === detail.productId)?.code || "",
         products.find((product) => product.id === detail.productId)?.name || "",
         detail.quantity,
@@ -116,17 +117,14 @@ export const InvoicePdfGenerator = () => {
     });
 
     const finalY = (doc as any).lastAutoTable.finalY || 110;
-    /* doc.setFontSize(12);
-    doc.text(`SubTotal $${invoice.total}`, 155, finalY + 10);
-    doc.text(`IVA (${userInfo.iva})$${invoice.total}`, 155, finalY + 16);
-    doc.text(`Total $${invoice.total}`, 155, finalY + 22); */
+
     autoTable(doc, {
       startY: finalY + 1,
       head: [["", ""]],
       body: [
-        ["SubTotal $ ", invoice.subTotal],
-        [`IVA (${userInfo.iva}) $ `, invoice.iva],
-        ["Total $ ", invoice.total],
+        ["SubTotal $ ", invoiceParams.subTotal],
+        [`IVA (${userInfo.iva}) $ `, invoiceParams.iva],
+        ["Total $ ", invoiceParams.total],
       ],
       columnStyles: {
         0: { cellWidth: 25 },
@@ -145,18 +143,23 @@ export const InvoicePdfGenerator = () => {
     return doc;
   };
 
-  // Función para ver el PDF en una nueva ventana
-  const viewPDF = () => {
-    const doc = generatePDF();
+  const viewPDF = (invoiceParams: Invoice) => {
+    console.log(JSON.stringify(invoiceParams, null, 3));
+
+    const doc = generatePDF(invoiceParams);
     const pdfBlob = doc.output("blob");
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, "_blank"); // Abrir el PDF en una nueva pestaña
+    window.open(pdfUrl, "_blank");
   };
 
-  // Función para descargar el PDF
-  const downloadPDF = () => {
-    const doc = generatePDF();
-    doc.save("factura.pdf"); // Descargar el archivo PDF
+  const downloadPDF = (invoiceParams: Invoice) => {
+    const doc = generatePDF(invoiceParams);
+    const randomNumber = String(Math.floor(Math.random() * 10000)).padStart(
+      4,
+      "0"
+    );
+    console.log(randomNumber);
+    doc.save(`factura${randomNumber}.pdf`);
   };
 
   return { viewPDF, downloadPDF };

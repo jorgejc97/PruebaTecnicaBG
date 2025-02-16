@@ -14,7 +14,7 @@ import {
   usePostProductMutation,
 } from "../../services";
 import { useProductStore } from "../../shared";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface Props {
   open: boolean;
@@ -24,6 +24,7 @@ interface Props {
 }
 
 export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
+  const [decimal, setDecimal] = useState("");
   const { onSetProducts } = useProductStore();
   const { formState, onChange, isFormValid, errors, resetForm } =
     useForm<Product>(
@@ -60,8 +61,8 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
 
   useEffect(() => {
     !open && resetForm();
+    setDecimal("");
   }, [open]);
-
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Agregar Producto</DialogTitle>
@@ -73,9 +74,12 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
           type="text"
           fullWidth
           value={formState.code}
-          onChange={({ target: { value } }) => onChange("code", value)}
+          onChange={({ target: { value } }) =>
+            onChange("code", value.toUpperCase())
+          }
           error={!!errors.code}
           helperText={errors.code}
+          style={{ textTransform: "uppercase" }}
         />
         <TextField
           margin="dense"
@@ -96,7 +100,7 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
           fullWidth
           value={formState.quantity === 0 ? "0" : formState.quantity}
           onChange={({ target: { value } }) => {
-            const regex = /^\d{0,3}$/;
+            const regex = /^\d{0,4}$/;
             regex.test(value) && onChange("quantity", Number(value));
           }}
           error={!!errors.quantity}
@@ -104,17 +108,41 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
         />
         <TextField
           margin="dense"
-          name="Precio Unitario"
-          label="Precio Unitario"
+          disabled={formState.unitPrice % 1 !== 0 ? true : false}
+          name="Precio Unitario(Enteros)"
+          label="Precio Unitario(Enteros)"
           type="text"
           fullWidth
           value={formState.unitPrice === 0 ? "0" : formState.unitPrice}
           onChange={({ target: { value } }) => {
-            const regex = /^\d{0,3}$/;
+            const regex = /^\d{0,4}$/;
             regex.test(value) && onChange("unitPrice", Number(value));
           }}
           error={!!errors.unitPrice}
           helperText={errors.unitPrice}
+        />
+        <TextField
+          disabled={formState.unitPrice > 0 ? false : true}
+          margin="dense"
+          label="Precio Unitario(Decimales)"
+          placeholder="00"
+          type="text"
+          fullWidth
+          value={decimal}
+          onChange={({ target: { value } }) => {
+            const regex = /^\d{0,2}$/;
+            regex.test(value) && setDecimal(value);
+            console.log("value", value, "decimal", decimal);
+            value.length < 2 &&
+              onChange("unitPrice", Math.trunc(formState.unitPrice));
+            value.length === 2 &&
+              onChange("unitPrice", Number(`${formState.unitPrice}.${value}`));
+          }}
+          error={!!(decimal.length < 2) ? true : false}
+          helperText={[
+            decimal.length < 2,
+            "Debe ingresar dos dígitos, ej: '00'",
+          ]}
         />
       </DialogContent>
       <DialogActions>
@@ -138,7 +166,12 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
               })
               .finally(() => onClose());
           }}
-          disabled={!isFormValid() || isLoading || isLoadingProducts}
+          disabled={
+            !isFormValid() ||
+            isLoading ||
+            isLoadingProducts ||
+            (decimal.length < 2 ? true : false)
+          }
           color="primary"
         >
           Guardar
