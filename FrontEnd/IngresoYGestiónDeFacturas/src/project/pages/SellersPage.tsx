@@ -52,10 +52,6 @@ export const SellersPage = () => {
       });
   };
 
-  useEffect(() => {
-    fetchGetSellers().unwrap().then(onSetSellers);
-  }, []);
-
   const handleFilterChange = (event: any) => {
     const filterValue = event.target.value;
     setFilter(filterValue);
@@ -70,6 +66,14 @@ export const SellersPage = () => {
       setFilteredSellers(sellers);
     }
   };
+
+  useEffect(() => {
+    fetchGetSellers().unwrap().then(onSetSellers);
+  }, []);
+
+  useEffect(() => {
+    setFilteredSellers(sellers);
+  }, [sellers]);
 
   return (
     <BasePage>

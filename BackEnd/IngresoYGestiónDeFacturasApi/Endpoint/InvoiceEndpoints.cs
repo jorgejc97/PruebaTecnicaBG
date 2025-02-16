@@ -22,8 +22,8 @@
                     invoiceDTO.CompanyId,
                     invoiceDTO.CustomerId,
                     invoiceDTO.SellerId,
-                    invoiceDTO.PaymentMethodId,
-                    invoiceDTO.PaymentStatusId,
+                    invoiceDTO.PaymentMethod,
+                    invoiceDTO.PaymentStatus,
                     invoiceDTO.SubTotal,
                     invoiceDTO.Iva,
                     invoiceDTO.Total,
@@ -49,8 +49,8 @@
                 invoice.CompanyId = invoiceDTO.CompanyId;
                 invoice.SellerId = invoiceDTO.SellerId;
                 invoice.CustomerId = invoiceDTO.CustomerId;
-                invoice.PaymentMethodId = invoiceDTO.PaymentMethodId;
-                invoice.PaymentStatusId = invoiceDTO.PaymentStatusId;
+                invoice.PaymentMethod = invoiceDTO.PaymentMethod;
+                invoice.PaymentStatus = invoiceDTO.PaymentStatus;
                 invoice.SubTotal = invoiceDTO.SubTotal;
                 invoice.Iva = invoiceDTO.Iva;
                 invoice.Total = invoiceDTO.Total;

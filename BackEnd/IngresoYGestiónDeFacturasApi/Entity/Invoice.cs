@@ -10,15 +10,13 @@
         public Customer? Customer { get; set; }
         public required Guid SellerId { get; set; }
         public Seller? Seller { get; set; }
-        public required Guid PaymentMethodId { get; set; }
-        public PaymentMethod? PaymentMethod { get; set; }
-        public required Guid PaymentStatusId { get; set; }
-        public PaymentStatus? PaymentStatus { get; set; }
+        public required string PaymentMethod { get; set; }
+        public required string PaymentStatus { get; set; }
         public required decimal SubTotal { get; set; }
         public required decimal Iva { get; set; }
         public required decimal Total { get; set; }
 
-        public static Invoice Create(long number, Guid companyId, Guid customerId, Guid sellerId, Guid paymentMethodId, Guid paymentStatusId, decimal subtotal, decimal iva, decimal total, List<InvoiceDetailDTO> invoiceDetailDTOs)
+        public static Invoice Create(long number, Guid companyId, Guid customerId, Guid sellerId, string paymentMethod, string paymentStatus, decimal subtotal, decimal iva, decimal total, List<InvoiceDetailDTO> invoiceDetailDTOs)
         {
             var guid = Guid.NewGuid();
             return new Invoice
@@ -28,8 +26,8 @@
                 CompanyId = companyId,
                 CustomerId = customerId,
                 SellerId = sellerId,
-                PaymentStatusId = paymentStatusId,
-                PaymentMethodId = paymentMethodId,
+                PaymentStatus = paymentStatus,
+                PaymentMethod = paymentMethod,
                 SubTotal = subtotal,
                 Iva = iva,
                 Total = total,

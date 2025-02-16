@@ -52,10 +52,6 @@ export const CustomersPage = () => {
       });
   };
 
-  useEffect(() => {
-    fetchGetCustomers().unwrap().then(onSetCustomers);
-  }, []);
-
   const handleFilterChange = (event: any) => {
     const filterValue = event.target.value;
     setFilter(filterValue);
@@ -70,6 +66,15 @@ export const CustomersPage = () => {
       setFilteredCustomers(customers);
     }
   };
+
+  useEffect(() => {
+    fetchGetCustomers().unwrap().then(onSetCustomers);
+  }, []);
+
+  useEffect(() => {
+    setFilteredCustomers(customers);
+  }, [customers]);
+
   return (
     <BasePage>
       <Grid

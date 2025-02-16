@@ -19,8 +19,6 @@ namespace IngresoYGestiónDeFacturasApi.Data
         public DbSet<Seller> Sellers => Set<Seller>();
         public DbSet<Customer> Customers => Set<Customer>();
         public DbSet<Product> Products => Set<Product>();
-        public DbSet<PaymentMethod> PaymentMethods => Set<PaymentMethod>();
-        public DbSet<PaymentStatus> PaymentStatuses => Set<PaymentStatus>();
         public DbSet<Invoice> Invoices => Set<Invoice>();
         public DbSet<InvoiceDetail> InvoiceDetails => Set<InvoiceDetail>();
     }

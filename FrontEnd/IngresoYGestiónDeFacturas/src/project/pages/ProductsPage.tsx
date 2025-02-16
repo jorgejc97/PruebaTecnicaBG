@@ -53,6 +53,10 @@ export const ProductsPage = () => {
   };
 
   useEffect(() => {
+    setFilteredProducts(products);
+  }, [products]);
+
+  useEffect(() => {
     fetchGetProducts().unwrap().then(onSetProducts);
   }, []);
 

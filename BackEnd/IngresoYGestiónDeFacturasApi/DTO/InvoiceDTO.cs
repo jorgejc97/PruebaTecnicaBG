@@ -7,8 +7,8 @@
         public required Guid CompanyId { get; set; }
         public required Guid CustomerId { get; set; }
         public required Guid SellerId { get; set; }
-        public required Guid PaymentMethodId { get; set; }
-        public required Guid PaymentStatusId { get; set; }
+        public string PaymentMethod { get; set; } = default!;
+        public string PaymentStatus { get; set; } = default!;
         public decimal SubTotal { get; set; } = default!;
         public decimal Iva { get; set; } = default!;
         public decimal Total { get; set; } = default!;

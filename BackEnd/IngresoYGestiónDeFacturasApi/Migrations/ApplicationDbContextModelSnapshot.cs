@@ -117,11 +117,13 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.Property<long>("Number")
                         .HasColumnType("bigint");
 
-                    b.Property<Guid>("PaymentMethodId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("PaymentStatusId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SellerId")
                         .HasColumnType("uniqueidentifier");
@@ -138,10 +140,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("PaymentMethodId");
-
-                    b.HasIndex("PaymentStatusId");
 
                     b.HasIndex("SellerId");
 
@@ -199,78 +197,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("InvoiceDetail", "DBO");
-                });
-
-            modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.PaymentMethod", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentMethod", "DBO");
-                });
-
-            modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.PaymentStatus", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("Active")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("LastModified")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("LastModifiedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PaymentStatus", "DBO");
                 });
 
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.Product", b =>
@@ -611,18 +537,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("IngresoYGestiónDeFacturasApi.Entity.PaymentMethod", "PaymentMethod")
-                        .WithMany("Invoice")
-                        .HasForeignKey("PaymentMethodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("IngresoYGestiónDeFacturasApi.Entity.PaymentStatus", "PaymentStatus")
-                        .WithMany("Invoice")
-                        .HasForeignKey("PaymentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("IngresoYGestiónDeFacturasApi.Entity.Seller", "Seller")
                         .WithMany("Invoice")
                         .HasForeignKey("SellerId")
@@ -634,10 +548,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("Customer");
-
-                    b.Navigation("PaymentMethod");
-
-                    b.Navigation("PaymentStatus");
 
                     b.Navigation("Seller");
 
@@ -722,16 +632,6 @@ namespace IngresoYGestiónDeFacturasApi.Migrations
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.Invoice", b =>
                 {
                     b.Navigation("InvoiceDetails");
-                });
-
-            modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.PaymentMethod", b =>
-                {
-                    b.Navigation("Invoice");
-                });
-
-            modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.PaymentStatus", b =>
-                {
-                    b.Navigation("Invoice");
                 });
 
             modelBuilder.Entity("IngresoYGestiónDeFacturasApi.Entity.Product", b =>

@@ -16,8 +16,6 @@ namespace IngresoYGestiónDeFacturasApi.Extension
         private static async Task SeedAsync(ApplicationDbContext context, UserManager<User> userManager)
         {
             await SeedUsersAsync(context, userManager);
-            await SeedPaymentMethodsAsync(context);
-            await SeedPaymentStatusesAsync(context);
             await SeedSellersAsync(context);
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
@@ -47,39 +45,6 @@ namespace IngresoYGestiónDeFacturasApi.Extension
                 await userManager.CreateAsync(user, "Abc123*+");
             }
 
-        }
-
-
-        private static async Task SeedPaymentMethodsAsync(ApplicationDbContext context)
-        {
-            if (!await context.PaymentMethods.AnyAsync())
-            {
-                var methods = new List<PaymentMethod>
-        {
-            new PaymentMethod { Description = "Efectivo" },
-            new PaymentMethod { Description = "Tarjeta de Crédito" },
-            new PaymentMethod { Description = "Transferencia Bancaria" },
-            new PaymentMethod { Description = "Cheque" }
-        };
-                await context.PaymentMethods.AddRangeAsync(methods);
-                await context.SaveChangesAsync();
-            }
-        }
-
-
-        private static async Task SeedPaymentStatusesAsync(ApplicationDbContext context)
-        {
-            if (!await context.PaymentStatuses.AnyAsync())
-            {
-                var statuses = new List<PaymentStatus>
-        {
-            new PaymentStatus { Description = "Pagado" },
-            new PaymentStatus { Description = "Pendiente" },
-            new PaymentStatus { Description = "Anulado" }
-        };
-                await context.PaymentStatuses.AddRangeAsync(statuses);
-                await context.SaveChangesAsync();
-            }
         }
 
 

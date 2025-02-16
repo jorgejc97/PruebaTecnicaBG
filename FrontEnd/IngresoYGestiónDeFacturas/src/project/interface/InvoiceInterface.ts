@@ -4,8 +4,8 @@ export interface Invoice {
   companyId: string;
   customerId: string;
   sellerId: string;
-  paymentMethodId: string;
-  paymentStatusId: string;
+  paymentMethod: string;
+  paymentStatus: string;
   subTotal: number;
   iva: number;
   total: number;
@@ -28,8 +28,8 @@ export const Facturas: Invoice[] = [
     companyId: "11111111-2222-3333-4444-555555555555",
     customerId: "66666666-7777-8888-9999-000000000000",
     sellerId: "aaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
-    paymentMethodId: "ffffffff-1111-2222-3333-444444444444",
-    paymentStatusId: "55555555-6666-7777-8888-999999999999",
+    paymentMethod: "Efectivo",
+    paymentStatus: "Pagado",
     subTotal: 150,
     iva: 12,
     total: 168,
@@ -50,8 +50,8 @@ export const Facturas: Invoice[] = [
     companyId: "22222222-3333-4444-5555-666666666666",
     customerId: "77777777-8888-9999-0000-111111111111",
     sellerId: "bbbbbbbb-cccc-dddd-eeee-ffffffffffff",
-    paymentMethodId: "66666666-7777-8888-9999-000000000000",
-    paymentStatusId: "88888888-9999-0000-1111-222222222222",
+    paymentMethod: "Tarjeta de Credito",
+    paymentStatus: "Pagado",
     subTotal: 99,
     iva: 8,
     total: 107,
@@ -72,8 +72,8 @@ export const Facturas: Invoice[] = [
     companyId: "33333333-4444-5555-6666-777777777777",
     customerId: "88888888-9999-0000-1111-222222222222",
     sellerId: "cccccccc-dddd-eeee-ffff-000000000000",
-    paymentMethodId: "77777777-8888-9999-0000-111111111111",
-    paymentStatusId: "99999999-0000-1111-2222-333333333333",
+    paymentMethod: "Cheque",
+    paymentStatus: "Pendiente",
     subTotal: 250,
     iva: 20,
     total: 270,
@@ -94,8 +94,8 @@ export const Facturas: Invoice[] = [
     companyId: "44444444-5555-6666-7777-888888888888",
     customerId: "99999999-0000-1111-2222-333333333333",
     sellerId: "dddddddd-eeee-ffff-0000-111111111111",
-    paymentMethodId: "88888888-9999-0000-1111-222222222222",
-    paymentStatusId: "00000000-1111-2222-3333-444444444444",
+    paymentMethod: "Transferencia",
+    paymentStatus: "Anulado",
     subTotal: 320,
     iva: 25,
     total: 345,
@@ -116,8 +116,8 @@ export const Facturas: Invoice[] = [
     companyId: "55555555-6666-7777-8888-999999999999",
     customerId: "00000000-1111-2222-3333-444444444444",
     sellerId: "eeeeeeee-ffff-0000-1111-222222222222",
-    paymentMethodId: "99999999-0000-1111-2222-333333333333",
-    paymentStatusId: "11111111-2222-3333-4444-555555555555",
+    paymentMethod: "Tarjeta de Credito",
+    paymentStatus: "Credito",
     subTotal: 79,
     iva: 6,
     total: 85,

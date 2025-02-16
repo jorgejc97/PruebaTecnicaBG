@@ -5,6 +5,10 @@ import {
   TextField,
   DialogActions,
   Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import { Product } from "../interface";
 import Swal from "sweetalert2";
@@ -112,6 +116,19 @@ export const ProductDialogEdit = ({ open = false, onClose }: Props) => {
           error={!!errors.unitPrice}
           helperText={errors.unitPrice}
         />
+        <FormControl fullWidth margin="dense">
+          <InputLabel>Estado</InputLabel>
+          <Select
+            value={formState.active ?? false}
+            label="Estado"
+            onChange={({ target: { value } }) =>
+              onChange("active", value === "true")
+            }
+          >
+            <MenuItem value={"true"}>Activo</MenuItem>
+            <MenuItem value={"false"}>Inactivo</MenuItem>
+          </Select>
+        </FormControl>
       </DialogContent>
       <DialogActions>
         <Button

@@ -4,3 +4,4 @@ export * from "./SellerDialogAdd";
 export * from "./SellerDialogEdit";
 export * from "./CustomerDialogAdd";
 export * from "./CustomerDialogEdit";
+export * from "./InvoiceDialogAdd";

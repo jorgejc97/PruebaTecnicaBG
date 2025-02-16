@@ -17,22 +17,30 @@ import {
 import { useEffect, useState } from "react";
 //import { InvoiceDialogAdd, InvoiceDialogEdit } from "../dialog";
 import Swal from "sweetalert2";
-import { useInvoiceStore } from "../../shared";
+import {
+  useCustomerStore,
+  useInvoiceStore,
+  useSellerStore,
+} from "../../shared";
 import {
   useDeleteInvoiceMutation,
   useLazyGetInvoicesQuery,
 } from "../../services";
-import { Invoice } from "../interface";
+import { Facturas, Invoice } from "../interface";
 import { BasePage } from "../template";
+import { InvoiceDialogAdd } from "../dialog";
 
 export const InvoicesPage = () => {
+  const { customers } = useCustomerStore();
+  //const { products, onSetProducts } = useProductStore();
+  const { sellers } = useSellerStore();
   const [isEditVisible, setisEditVisible] = useState(false);
   const [isAddVisible, setisAddVisible] = useState(false);
   const { onSetActiveInvoice, invoices, onSetInvoices } = useInvoiceStore();
   const [fetchGetInvoices, { isLoading }] = useLazyGetInvoicesQuery();
   const [fetchDeleteInvoice] = useDeleteInvoiceMutation();
   const [filter, setFilter] = useState("");
-  const [filteredInvoices, setFilteredInvoices] = useState(invoices);
+  const [filteredInvoices, setFilteredInvoices] = useState(Facturas);
   const [page, setPage] = useState(0);
 
   const onPressDeleteInvoice = async (invoice: Invoice) => {
@@ -52,10 +60,6 @@ export const InvoicesPage = () => {
       });
   };
 
-  useEffect(() => {
-    fetchGetInvoices().unwrap().then(onSetInvoices);
-  }, []);
-
   const handleFilterChange = (event: any) => {
     const filterValue = event.target.value;
     setFilter(filterValue);
@@ -66,15 +70,21 @@ export const InvoicesPage = () => {
           new Date(invoice.createdAt!)
             .toLocaleDateString()
             .includes(filterValue.toLowerCase()) ||
-          invoice.subTotal.toString().includes(filterValue) ||
-          invoice.iva.toString().includes(filterValue) ||
           invoice.total.toString().includes(filterValue)
       );
       setFilteredInvoices(filtered);
     } else {
-      setFilteredInvoices(invoices);
+      setFilteredInvoices(Facturas);
     }
   };
+
+  useEffect(() => {
+    fetchGetInvoices().unwrap().then(onSetInvoices);
+  }, []);
+
+  useEffect(() => {
+    setFilteredInvoices(invoices);
+  }, [invoices]);
 
   return (
     <BasePage>
@@ -226,10 +236,18 @@ export const InvoicesPage = () => {
                                 invoice.createdAt!
                               ).toLocaleDateString()}
                             </TableCell>
-
-                            <TableCell>{invoice.customerId}</TableCell>
-                            <TableCell>{invoice.sellerId}</TableCell>
-                            <TableCell>{invoice.paymentStatusId}</TableCell>
+                            <TableCell>
+                              {" "}
+                              {customers.find(
+                                (customer) => customer.id === invoice.customerId
+                              )?.name || "Desconocido"}
+                            </TableCell>
+                            <TableCell>
+                              {sellers.find(
+                                (seller) => seller.id === invoice.customerId
+                              )?.name || "Desconocido"}
+                            </TableCell>
+                            <TableCell>{invoice.paymentStatus}</TableCell>
                             <TableCell>{invoice.total}</TableCell>
                             <TableCell>
                               <IconButton
@@ -303,13 +321,13 @@ export const InvoicesPage = () => {
         </Grid>
 
         {/* Modales */}
-        {/*  <InvoiceDialogAdd
+        <InvoiceDialogAdd
           open={isAddVisible}
           onClose={() => setisAddVisible(false)}
           onSave={() => {}}
           onCancel={() => setisAddVisible(false)}
         />
-        <InvoiceDialogEdit
+        {/* <InvoiceDialogEdit
           open={isEditVisible}
           onClose={() => setisEditVisible(false)}
         /> */}
