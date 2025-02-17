@@ -32,8 +32,71 @@ export const HomePage = () => {
   const { invoices } = useInvoiceStore();
   const { products } = useProductStore();
 
+  const getMonthlySales = (invoices: Invoice[]) => {
+    const monthlySales: { [key: string]: number } = {};
+    console.log(JSON.stringify(invoices));
+    const allMonths = [
+      "JAN",
+      "FEB",
+      "MAR",
+      "APR",
+      "MAY",
+      "JUN",
+      "JUL",
+      "AUG",
+      "SEP",
+      "OCT",
+      "NOV",
+      "DEC",
+    ];
+
+    allMonths.forEach((month) => {
+      monthlySales[month] = 0;
+    });
+
+    // Procesamos las facturas y contamos las ventas
+    invoices.forEach((invoice) => {
+      if (invoice.createdAt) {
+        const date = new Date(invoice.createdAt);
+        console.log(
+          "Factura creada en:",
+          invoice.createdAt,
+          "Fecha procesada:",
+          date
+        ); // Log de la fecha de la factura
+
+        if (!isNaN(date.getTime())) {
+          // Convertimos el mes a mayúsculas
+          const month = date
+            .toLocaleString("default", { month: "short" })
+            .toUpperCase();
+          console.log(`Mes de la factura: ${month}`); // Verifica el mes de la factura
+
+          // Verifica que el mes es uno válido
+          if (allMonths.includes(month)) {
+            monthlySales[month] += 1;
+          } else {
+            console.error(`Mes no válido detectado: ${month}`); // Para verificar si el mes es correcto
+          }
+        } else {
+          console.error(`Fecha inválida en la factura: ${invoice.createdAt}`);
+        }
+      }
+    });
+
+    // Convertimos el objeto de ventas mensuales a un array
+    const monthlySalesArray = allMonths.map((month) => ({
+      month,
+      sales: monthlySales[month],
+    }));
+
+    console.log("Ventas mensuales calculadas:", monthlySalesArray); // Log de las ventas mensuales
+    return monthlySalesArray;
+  };
+
   const getLast10Invoices = (invoices: Invoice[]) => {
-    return invoices
+    const invoicesCopy = [...invoices];
+    return invoicesCopy
       .sort((a, b) => {
         const dateA = new Date(a.createdAt ?? 0).getTime();
         const dateB = new Date(b.createdAt ?? 0).getTime();
@@ -44,7 +107,6 @@ export const HomePage = () => {
 
   const getTop10MostSoldProducts = (invoices: Invoice[]) => {
     const productSales: Record<string, number> = {};
-
     invoices.forEach((invoice) => {
       invoice.invoiceDetails.forEach((detail) => {
         if (productSales[detail.productId ?? ""]) {
@@ -54,40 +116,10 @@ export const HomePage = () => {
         }
       });
     });
-
     const productSalesArray = Object.entries(productSales)
       .map(([productId, totalSales]) => ({ productId, totalSales }))
       .sort((a, b) => b.totalSales - a.totalSales);
     return productSalesArray.slice(0, 10);
-  };
-
-  const getMonthlySales = (invoices: Invoice[]) => {
-    const monthlySales: { [key: string]: number } = {};
-
-    invoices.forEach((invoice) => {
-      const date = new Date(invoice.createdAt ?? "");
-      const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
-
-      if (!monthlySales[monthYear]) {
-        monthlySales[monthYear] = 0;
-      }
-
-      monthlySales[monthYear] += invoice.total;
-    });
-
-    const monthlySalesArray = Object.entries(monthlySales).map(
-      ([monthYear, totalSales]) => ({
-        monthYear,
-        totalSales,
-      })
-    );
-
-    return monthlySalesArray.sort((a, b) => {
-      const [yearA, monthA] = a.monthYear.split("-").map(Number);
-      const [yearB, monthB] = b.monthYear.split("-").map(Number);
-
-      return yearB - yearA || monthB - monthA;
-    });
   };
 
   const monthlySales = getMonthlySales(invoices);

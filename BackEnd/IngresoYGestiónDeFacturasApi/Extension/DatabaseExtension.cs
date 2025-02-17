@@ -1,5 +1,4 @@
-﻿
-namespace IngresoYGestiónDeFacturasApi.Extension
+﻿namespace IngresoYGestiónDeFacturasApi.Extension
 {
     public static class DatabaseExtension
     {
@@ -19,6 +18,7 @@ namespace IngresoYGestiónDeFacturasApi.Extension
             await SeedSellersAsync(context);
             await SeedCustomersAsync(context);
             await SeedProductsAsync(context);
+            await SeedInvoicesAsync(context);
         }
 
         private static async Task SeedUsersAsync(ApplicationDbContext context, UserManager<User> userManager)
@@ -1854,106 +1854,110 @@ new Product
             }
         }
 
-        //private static async Task SeedInvoicesAsync(ApplicationDbContext context)
-        //{
-        //    if (!await context.Invoices.AnyAsync())
-        //    {
-        //        // Obtener CompanyId desde el único usuario en la base de datos
-        //        var companyId = await context.Users.Select(u => u.Id).FirstOrDefaultAsync();
+        private static async Task SeedInvoicesAsync(ApplicationDbContext context)
+        {
+            if (!await context.Invoices.AnyAsync())
+            {
+                var company = await context.Users.Select(u => new { u.Id, u.Iva }).FirstOrDefaultAsync();
+                var customerIds = await context.Customers.Select(c => c.Id).ToListAsync();
+                var sellerIds = await context.Sellers.Select(s => s.Id).ToListAsync();
+                var availableProducts = await context.Products.Select(p => new { p.Id, p.UnitPrice }).ToListAsync();
 
-        //        // Obtener los CustomerIds y SellerIds (suponiendo que ya hay datos en las tablas)
-        //        var customerIds = await context.Customers.Select(c => c.Id).ToListAsync();
-        //        var sellerIds = await context.Sellers.Select(s => s.Id).ToListAsync();
+                if (company == null || customerIds.Count == 0 || sellerIds.Count == 0 || availableProducts.Count == 0)
+                {
+                    throw new InvalidOperationException("No hay datos en la tabla de Customers o Sellers");
+                }
 
-        //        if (customerIds.Count == 0 || sellerIds.Count == 0)
-        //        {
-        //            throw new InvalidOperationException("No hay datos en la tabla de Customers o Sellers");
-        //        }
+                var paymentMethods = new List<string> { "Efectivo", "Tarjeta de Crédito", "Transferencia Bancaria", "Cheque" };
+                var paymentStatuses = new List<string> { "Pagado ", "Pendiente ", "Anulado" };
+                var random = new Random();
 
-        //        // Creamos una lista para las facturas
-        //        var invoices = new List<Invoice>();
-        //        var invoiceDetails = new List<InvoiceDetail>();
+                var companyId = Guid.Parse(company.Id);
 
-        //        // Generar 10 facturas como ejemplo (puedes aumentar la cantidad)
-        //        var random = new Random();
-        //        for (int i = 0; i < 10; i++)
-        //        {
-        //            // Obtener un customerId y sellerId aleatorio de las listas de IDs
-        //            var customerId = customerIds[random.Next(customerIds.Count)];
-        //            var sellerId = sellerIds[random.Next(sellerIds.Count)];
+                for (int i = 0; i < 30; i++)
+                {
+                    var customerId = customerIds[random.Next(customerIds.Count)];
+                    var sellerId = sellerIds[random.Next(sellerIds.Count)];
+                    string paymentMethod = paymentMethods[random.Next(paymentMethods.Count)];
+                    string paymentStatus = paymentStatuses[random.Next(paymentStatuses.Count)];
+                    int numberOfDetails = random.Next(1, 6);
+                    var invoiceDetails = new List<InvoiceDetailDTO>();
+                    decimal subTotal = 0;
 
-        //            // Crear una lista de productos y cantidades (esto también se puede obtener de manera aleatoria o configurada)
-        //            var products = new List<(Guid productId, long quantity)>
-        //    {
-        //        (new Guid("d9b1f86f-c524-4b0e-bfd5-2bb772798295"), 3), // Producto de ejemplo
-        //        (new Guid("f732beeb-05d0-463a-9ef5-7b7e3b2089b5"), 2)  // Otro producto de ejemplo
-        //    };
+                    for (int j = 0; j < numberOfDetails; j++)
+                    {
+                        var selectedProduct = availableProducts[random.Next(availableProducts.Count())];
+                        var quantity = random.Next(1, 50);
+                        var total = Math.Round(selectedProduct.UnitPrice * quantity, 2);
 
-        //            // Calcular el subtotal
-        //            decimal subTotal = 0;
-        //            var invoiceDetailDTOs = new List<InvoiceDetailDTO>();
+                        invoiceDetails.Add(new InvoiceDetailDTO
+                        {
+                            ProductId = selectedProduct.Id,
+                            Quantity = quantity,
+                            UnitPrice = selectedProduct.UnitPrice,
+                            Total = total
+                        });
 
-        //            foreach (var product in products)
-        //            {
-        //                // Buscar el producto por su ID
-        //                var productEntity = await context.Products.FindAsync(product.productId);
-        //                if (productEntity == null)
-        //                {
-        //                    throw new ArgumentException($"Product with ID {product.productId} not found");
-        //                }
+                        subTotal = Math.Round(subTotal + total, 2);
+                    }
 
-        //                // Calcular el total por producto
-        //                decimal total = productEntity.UnitPrice * product.quantity;
+                    decimal iva = Math.Round((subTotal * company.Iva) / 100, 2);
+                    decimal totalInvoice = Math.Round(subTotal + iva, 2);
 
-        //                // Crear el detalle de la factura
-        //                invoiceDetailDTOs.Add(new InvoiceDetailDTO
-        //                {
-        //                    ProductId = product.productId,
-        //                    Quantity = product.quantity,
-        //                    UnitPrice = productEntity.UnitPrice,
-        //                    Total = total
-        //                });
+                    long invoiceNumber = random.Next(1000, 10000);
 
-        //                // Acumular al subtotal
-        //                subTotal += total;
-        //            }
+                    var invoice = new Invoice
+                    {
 
-        //            // Calcular el IVA (15%)
-        //            decimal iva = subTotal * 0.15m;
+                        Number = invoiceNumber,
+                        CompanyId = companyId,
+                        CustomerId = customerId,
+                        SellerId = sellerId,
+                        PaymentMethod = paymentMethod,
+                        PaymentStatus = paymentStatus,
+                        SubTotal = subTotal,
+                        Iva = iva,
+                        Total = totalInvoice,
+                        CreatedAt = GetRandomDate(),
+                        InvoiceDetails = new List<InvoiceDetail>()
+                    };
 
-        //            // Calcular el total de la factura (subtotal + IVA)
-        //            decimal totalInvoice = subTotal + iva;
+                    await context.Invoices.AddAsync(invoice);
+                    await context.SaveChangesAsync();
 
-        //            // Generar un número de factura aleatorio
-        //            long invoiceNumber = random.Next(100000, 999999);
+                    var invoiceId = invoice.Id;
 
-        //            // Información del pago (esto lo puedes modificar según tus necesidades)
-        //            string paymentMethod = "Cash";
-        //            string paymentStatus = "Pending";
+                    foreach (var invoiceDetail in invoiceDetails)
+                    {
+                        invoiceDetail.InvoiceId = invoiceId;
+                    }
 
-        //            // Crear la factura
-        //            var invoice = Invoice.Create(
-        //                invoiceNumber,
-        //                new Guid(companyId),  // Usamos el mismo CompanyId para todos
-        //                customerId,
-        //                sellerId,
-        //                paymentMethod,
-        //                paymentStatus,
-        //                subTotal,
-        //                iva,
-        //                totalInvoice,
-        //                invoiceDetailDTOs
-        //            );
+                    var invoiceDetailEntities = invoiceDetails.Select(id => new InvoiceDetail
+                    {
+                        InvoiceId = invoice.Id,
+                        ProductId = id.ProductId,
+                        Quantity = id.Quantity,
+                        UnitPrice = id.UnitPrice,
+                        Total = id.Total
+                    }).ToList();
 
-        //            // Agregar la factura a la lista
-        //            invoices.Add(invoice);
-        //        }
+                    await context.InvoiceDetails.AddRangeAsync(invoiceDetailEntities);
+                    await context.SaveChangesAsync();
 
-        //        // Guardar las facturas en la base de datos
-        //        await context.Invoices.AddRangeAsync(invoices);
-        //        await context.SaveChangesAsync();
-        //    }
-        //}
+                }
+            }
+        }
 
+        private static DateTime GetRandomDate()
+        {
+            var startDate = new DateTime(2025, 1, 1);
+            var endDate = DateTime.UtcNow.Date;
+
+            var random = new Random();
+            var range = (endDate - startDate).Days;
+            var randomDays = random.Next(range);
+
+            return startDate.AddDays(randomDays);
+        }
     }
 }

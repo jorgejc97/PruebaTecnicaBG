@@ -102,7 +102,7 @@ builder.Services.AddCors(options =>
         policy
               .AllowAnyMethod()
               .AllowAnyHeader()
-              .WithOrigins("https://coyosystem.netlify.app");
+              .WithOrigins("https://coyosystem.netlify.app", "http://localhost:5173");
     });
 });
 
