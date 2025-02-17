@@ -457,12 +457,10 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                       width: "4%",
                       backgroundColor: "skyblue",
                       fontWeight: "bold",
-                      display:
-                        formState.invoiceDetails.length > 0
-                          ? "table-cell"
-                          : "none",
                     }}
-                  ></TableCell>
+                  >
+                    {""}
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -511,23 +509,28 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
                   <TableCell
                     colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
-                  <TableCell align="right">Subtotal $</TableCell>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Subtotal $
+                  </TableCell>
                   <TableCell align="right">{formState.subTotal}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
                     colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
-                  <TableCell align="right">{`IVA (${
-                    userInfo.iva
-                  })% ${"$"}`}</TableCell>
+                  <TableCell
+                    style={{ fontWeight: "bold" }}
+                    align="right"
+                  >{`IVA (${userInfo.iva})% ${"$"}`}</TableCell>
                   <TableCell align="right">{formState.iva}</TableCell>
                 </TableRow>
                 <TableRow>
                   <TableCell
                     colSpan={formState.invoiceDetails.length > 0 ? 4 : 3}
                   ></TableCell>
-                  <TableCell align="right">Total $</TableCell>
+                  <TableCell style={{ fontWeight: "bold" }} align="right">
+                    Total $
+                  </TableCell>
                   <TableCell align="right">{formState.total}</TableCell>
                 </TableRow>
               </TableBody>
