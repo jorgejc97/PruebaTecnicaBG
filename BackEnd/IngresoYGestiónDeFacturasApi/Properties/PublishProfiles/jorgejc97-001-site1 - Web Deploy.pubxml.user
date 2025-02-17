@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project>
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword />
+    <History>True|2025-02-17T01:35:29.2162809Z||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+  <ItemGroup>
+    <EFMigrations Include="IngresoYGestiónDeFacturasApi.Data.ApplicationDbContext">
+      <Value>Data Source=SQL1002.site4now.net%3bInitial Catalog=db_ab2e62_systemfacturation%3bUser Id=db_ab2e62_systemfacturation_admin%3bPassword=Luis1997Jc1603</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

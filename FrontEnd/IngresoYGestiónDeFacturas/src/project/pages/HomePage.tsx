@@ -1,15 +1,7 @@
-import { useEffect } from "react";
-import {
-  useLazyGetCustomersQuery,
-  useLazyGetInvoicesQuery,
-  useLazyGetProductsQuery,
-  useLazyGetSellersQuery,
-} from "../../services";
 import {
   useCustomerStore,
   useInvoiceStore,
   useProductStore,
-  useSellerStore,
 } from "../../shared";
 import {
   Box,
@@ -36,14 +28,9 @@ import {
 import { Invoice } from "../interface";
 
 export const HomePage = () => {
-  const [fetchGetInvoices] = useLazyGetInvoicesQuery();
-  const [fetchGetSellers] = useLazyGetSellersQuery();
-  const [fetchGetProducts] = useLazyGetProductsQuery();
-  const [fetchGetCustomers] = useLazyGetCustomersQuery();
-  const { customers, onSetCustomers } = useCustomerStore();
-  const { invoices, onSetInvoices } = useInvoiceStore();
-  const { products, onSetProducts } = useProductStore();
-  const { onSetSellers } = useSellerStore();
+  const { customers } = useCustomerStore();
+  const { invoices } = useInvoiceStore();
+  const { products } = useProductStore();
 
   const getLast10Invoices = (invoices: Invoice[]) => {
     return invoices
@@ -106,15 +93,6 @@ export const HomePage = () => {
   const monthlySales = getMonthlySales(invoices);
   const last10Invoices = getLast10Invoices(invoices);
   const top10Products = getTop10MostSoldProducts(invoices);
-
-  useEffect(() => {
-    Promise.all([
-      fetchGetCustomers().unwrap().then(onSetCustomers),
-      fetchGetSellers().unwrap().then(onSetSellers),
-      fetchGetProducts().unwrap().then(onSetProducts),
-      fetchGetInvoices().unwrap().then(onSetInvoices),
-    ]);
-  }, []);
 
   return (
     <Box sx={{ padding: 5 }}>

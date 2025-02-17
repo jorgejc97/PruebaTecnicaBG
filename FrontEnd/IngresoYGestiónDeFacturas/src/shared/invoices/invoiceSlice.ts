@@ -19,7 +19,7 @@ const initialState: InitialStateInterface = {
     iva: 0,
     total: 0,
     createdAt: null,
-    invoiceDetail: [],
+    invoiceDetails: [],
   },
   invoices: [],
 };

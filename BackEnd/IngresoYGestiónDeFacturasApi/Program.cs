@@ -94,17 +94,17 @@ Log.Logger = new LoggerConfiguration()
 builder.Host.UseSerilog();
 
 
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policyBuilder =>
+    options.AddDefaultPolicy(policy =>
     {
-        policyBuilder
-            .AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader();
+        policy
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .WithOrigins("https://coyosystem.netlify.app");
     });
 });
-
 
 
 var app = builder.Build();
@@ -115,21 +115,26 @@ var app = builder.Build();
 // Configure the HTTPs request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ingreso y Gestion de Facturas API V1");
-    });
-    await app.InitializeDatabaseAsync();
+
+
 }
+await app.InitializeDatabaseAsync();
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ingreso y Gestion de Facturas API V1");
+});
+
+
 
 app.UseSerilogRequestLogging();
+app.UseCors();
 app.MapCarter();
-app.UseCors("CorsPolicy");
 app.UseExceptionHandler(options => { });
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+
 
 app.Run();

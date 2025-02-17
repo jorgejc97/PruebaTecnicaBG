@@ -1,9 +1,9 @@
 // routes.ts
+//export const BASE_URL: string = "https://localhost:7107";
 
-export const BASE_URL: string = "https://localhost:7107";
-//export const BASE_URL: string = "https://2137-45-4-202-142.ngrok-free.app";
+export const BASE_URL = "http://jorgejc97-002-site1.anytempurl.com";
 
-export const BASE_API: string = "/api";
+export const BASE_API = "/api";
 export const LOGIN_BASE_URL = "/login";
 export const USER_BASE_URL = "/updateuse";
 export const CUSTOMER_BASE_URL = "/customer";

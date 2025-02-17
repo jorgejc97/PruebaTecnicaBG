@@ -18,22 +18,50 @@ import {
   BottomNavigation,
   BottomNavigationAction,
 } from "@mui/material";
-import { useAuthStore } from "../../shared";
+import {
+  useAuthStore,
+  useCustomerStore,
+  useInvoiceStore,
+  useProductStore,
+  useSellerStore,
+} from "../../shared";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import {
+  useLazyGetInvoicesQuery,
+  useLazyGetSellersQuery,
+  useLazyGetProductsQuery,
+  useLazyGetCustomersQuery,
+} from "../../services";
 
 export const NavBar = () => {
   const { onLogOut } = useAuthStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [value, setValue] = useState(location.pathname);
+  const [fetchGetInvoices] = useLazyGetInvoicesQuery();
+  const [fetchGetSellers] = useLazyGetSellersQuery();
+  const [fetchGetProducts] = useLazyGetProductsQuery();
+  const [fetchGetCustomers] = useLazyGetCustomersQuery();
+  const { onSetCustomers } = useCustomerStore();
+  const { onSetInvoices } = useInvoiceStore();
+  const { onSetProducts } = useProductStore();
+  const { onSetSellers } = useSellerStore();
 
-  const handleNavigation = (event: any, newValue: string) => {
+  const handleNavigation = (_: any, newValue: string) => {
     setValue(newValue);
     navigate(newValue);
   };
 
   const onPressLogOut = () => onLogOut();
+  useEffect(() => {
+    Promise.all([
+      fetchGetCustomers().unwrap().then(onSetCustomers),
+      fetchGetSellers().unwrap().then(onSetSellers),
+      fetchGetProducts().unwrap().then(onSetProducts),
+      fetchGetInvoices().unwrap().then(onSetInvoices),
+    ]);
+  }, []);
 
   return (
     <AppBar position="fixed">

@@ -34,3 +34,6 @@ bin/
 obj/
 out/
 /BackEnd/IngresoYGestiónDeFacturasApi/.vs
+
+# Local Netlify folder
+.netlify

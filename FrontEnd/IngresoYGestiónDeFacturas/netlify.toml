@@ -1,0 +1,5 @@
+[[redirects]]
+  from = "/api/*"
+  to = "http://jorgejc97-002-site1.anytempurl.com/api/:splat"
+  status = 200
+  force = true
