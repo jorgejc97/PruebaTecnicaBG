@@ -16,9 +16,9 @@ namespace IngresoYGestiónDeFacturasApi.Extension
         private static async Task SeedAsync(ApplicationDbContext context, UserManager<User> userManager)
         {
             await SeedUsersAsync(context, userManager);
-            //await SeedSellersAsync(context);
-            //await SeedCustomersAsync(context);
-            //await SeedProductsAsync(context);
+            await SeedSellersAsync(context);
+            await SeedCustomersAsync(context);
+            await SeedProductsAsync(context);
         }
 
         private static async Task SeedUsersAsync(ApplicationDbContext context, UserManager<User> userManager)
@@ -1466,7 +1466,7 @@ new Product
     Name = "Sofá de 3 puestos",
     Quantity = 40,
     UnitPrice = 499.99m
-}
+},
 
                 new Product
                 {
