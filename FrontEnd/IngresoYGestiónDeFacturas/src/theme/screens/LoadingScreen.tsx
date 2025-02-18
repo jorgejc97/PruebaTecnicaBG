@@ -6,7 +6,6 @@ export const LoadingScreen = () => {
   return (
     <Box
       sx={{
-        //backgroundColor: theme.palette.primary.main,
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",

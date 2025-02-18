@@ -5,6 +5,8 @@ import {
   TextField,
   DialogActions,
   Button,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -56,7 +58,6 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
     useLazyGetSellersQuery();
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPostSeller(formState)
       .unwrap()
       .then(async () => await fetchGetSeller().unwrap().then(onSetSellers))
@@ -173,9 +174,12 @@ export const SellerDialogAdd = ({ open = false, onClose }: Props) => {
           disabled={!isFormValid() || isLoading || isLoadingSellers}
           color="primary"
         >
-          Guardar
+          Crear Vendedor
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };

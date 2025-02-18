@@ -1,4 +1,11 @@
-import { Button, Grid, TextField, Typography } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useAuthStore } from "../../shared";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -249,7 +256,7 @@ export const ConfigurationPage = () => {
                       alignItems: "center",
                     }}
                   >
-                    <Grid item xs={4}>
+                    <Grid item>
                       <Button
                         disabled={!isFormValid() || isLoading}
                         variant="contained"
@@ -267,6 +274,9 @@ export const ConfigurationPage = () => {
           </Grid>
         </Grid>
       </Grid>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </BasePage>
   );
 };

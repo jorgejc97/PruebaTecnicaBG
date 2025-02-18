@@ -1,6 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { Children } from "../../interfaces";
-import { VpnKey } from "@mui/icons-material";
+import { Person } from "@mui/icons-material";
 
 interface Props extends Children {
   title: string;
@@ -11,37 +11,56 @@ export const AuthLayout = ({ children, title }: Props) => {
     <Grid
       container
       spacing={0}
-      //direction="column"
       alignItems="center"
-      justifyContent="center"
-      sx={{ minHeight: "100vh", bgcolor: "primary.main", p: 4 }}
+      justifyContent="space-between"
+      sx={{
+        height: "100vh",
+        p: 3,
+        overflow: "hidden",
+        bgcolor: "secondary.main",
+      }}
     >
       <Grid
         item
         className="box-shadow animate__animated animate__fadeIn animate__faster"
-        xs={4}
+        xs={12}
+        sm={4}
         sx={{
           width: { sm: 450 },
           bgcolor: "white",
-          p: 3,
+          p: 4,
           borderRadius: 2,
+          boxShadow: 3,
+          maxHeight: "90vh",
+          overflow: "auto",
         }}
       >
         <Typography variant="h5" sx={{ mb: 3 }}>
           {title}
         </Typography>
-        <VpnKey
+        <Person
           sx={{
-            fontSize: 50,
-            mb: 3,
+            fontSize: 80,
             color: "primary.main",
-            mr: 1,
+            display: "block",
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         />
-
         {children}
       </Grid>
-      <Grid item xs={6}></Grid>
+
+      <Grid
+        item
+        xs={12}
+        sm={7.5}
+        sx={{
+          backgroundImage: 'url("/pantallalogin.png")',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "100%",
+        }}
+      ></Grid>
     </Grid>
   );
 };

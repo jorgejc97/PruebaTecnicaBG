@@ -34,63 +34,43 @@ export const HomePage = () => {
 
   const getMonthlySales = (invoices: Invoice[]) => {
     const monthlySales: { [key: string]: number } = {};
-    console.log(JSON.stringify(invoices));
     const allMonths = [
-      "JAN",
-      "FEB",
-      "MAR",
-      "APR",
-      "MAY",
-      "JUN",
-      "JUL",
-      "AUG",
-      "SEP",
-      "OCT",
-      "NOV",
-      "DEC",
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
     ];
 
     allMonths.forEach((month) => {
       monthlySales[month] = 0;
     });
 
-    // Procesamos las facturas y contamos las ventas
     invoices.forEach((invoice) => {
       if (invoice.createdAt) {
         const date = new Date(invoice.createdAt);
-        console.log(
-          "Factura creada en:",
-          invoice.createdAt,
-          "Fecha procesada:",
-          date
-        ); // Log de la fecha de la factura
 
         if (!isNaN(date.getTime())) {
-          // Convertimos el mes a mayúsculas
-          const month = date
-            .toLocaleString("default", { month: "short" })
-            .toUpperCase();
-          console.log(`Mes de la factura: ${month}`); // Verifica el mes de la factura
+          const month = date.toLocaleString("en-US", { month: "short" });
 
-          // Verifica que el mes es uno válido
           if (allMonths.includes(month)) {
             monthlySales[month] += 1;
-          } else {
-            console.error(`Mes no válido detectado: ${month}`); // Para verificar si el mes es correcto
           }
-        } else {
-          console.error(`Fecha inválida en la factura: ${invoice.createdAt}`);
         }
       }
     });
-
-    // Convertimos el objeto de ventas mensuales a un array
     const monthlySalesArray = allMonths.map((month) => ({
       month,
       sales: monthlySales[month],
     }));
 
-    console.log("Ventas mensuales calculadas:", monthlySalesArray); // Log de las ventas mensuales
     return monthlySalesArray;
   };
 
@@ -127,7 +107,7 @@ export const HomePage = () => {
   const top10Products = getTop10MostSoldProducts(invoices);
 
   return (
-    <Box sx={{ padding: 5 }}>
+    <Box sx={{ bgcolor: "secondary.main", padding: 5 }}>
       <Typography variant="h4" gutterBottom>
         Dashboard de Ventas 2025
       </Typography>
@@ -136,7 +116,7 @@ export const HomePage = () => {
         <Typography variant="h6" gutterBottom>
           Ventas Mensuales
         </Typography>
-        <ResponsiveContainer width="100%" height={300}>
+        <ResponsiveContainer width="100%" height={400}>
           <BarChart data={monthlySales}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="month" />

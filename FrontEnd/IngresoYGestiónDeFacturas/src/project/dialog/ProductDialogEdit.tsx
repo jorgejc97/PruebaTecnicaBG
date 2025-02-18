@@ -9,6 +9,8 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import { Product } from "../interface";
 import Swal from "sweetalert2";
@@ -49,7 +51,6 @@ export const ProductDialogEdit = ({ open = false, onClose }: Props) => {
     useLazyGetProductsQuery();
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPutProduct(formState)
       .unwrap()
       .then(async () => await fetchGetProducts().unwrap().then(onSetProducts))
@@ -157,6 +158,9 @@ export const ProductDialogEdit = ({ open = false, onClose }: Props) => {
           Guardar
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };

@@ -5,6 +5,8 @@ import {
   TextField,
   DialogActions,
   Button,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -49,7 +51,6 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
     useLazyGetProductsQuery();
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPostProduct(formState)
       .unwrap()
       .then(async () => await fetchGetProducts().unwrap().then(onSetProducts))
@@ -132,7 +133,6 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
           onChange={({ target: { value } }) => {
             const regex = /^\d{0,2}$/;
             regex.test(value) && setDecimal(value);
-            console.log("value", value, "decimal", decimal);
             value.length < 2 &&
               onChange("unitPrice", Math.trunc(formState.unitPrice));
             value.length === 2 &&
@@ -174,9 +174,12 @@ export const ProductDialogAdd = ({ open = false, onClose }: Props) => {
           }
           color="primary"
         >
-          Guardar
+          Crear Producto
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };

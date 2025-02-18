@@ -1,5 +1,6 @@
 import { Delete, Edit } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Grid,
   IconButton,
@@ -82,7 +83,7 @@ export const ProductsPage = () => {
         direction="column"
         sx={{
           alignItems: "center",
-          p: 3,
+          p: 2,
           overflowY: "auto",
         }}
       >
@@ -234,53 +235,55 @@ export const ProductsPage = () => {
                               {product.active ? "Activo" : "Inactivo"}
                             </TableCell>
                             <TableCell>
-                              <IconButton
-                                color="primary"
-                                aria-label="edit"
-                                sx={{
-                                  borderRadius: "4px",
-                                  "&:hover": {
-                                    backgroundColor: "#1976d2",
-                                    color: "white",
-                                  },
-                                }}
-                                onClick={() => {
-                                  onSetActiveProduct(product);
-                                  setisEditVisible(true);
-                                }}
-                              >
-                                <Edit />
-                              </IconButton>
-                              <IconButton
-                                color="secondary"
-                                aria-label="delete"
-                                sx={{
-                                  borderRadius: "4px",
-                                  "&:hover": {
-                                    backgroundColor: "#d32f2f",
-                                    color: "white",
-                                  },
-                                }}
-                                onClick={() => {
-                                  Swal.fire({
-                                    title: "¿Estás seguro?",
-                                    text: "¡No podrás revertir esta acción!",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "#3085d6",
-                                    cancelButtonColor: "#d33",
-                                    confirmButtonText: "Sí, eliminar",
-                                    cancelButtonText: "Cancelar",
-                                    showLoaderOnConfirm: true,
-                                  }).then(async (result) => {
-                                    if (result.isConfirmed) {
-                                      await onPressDeleteProduct(product);
-                                    }
-                                  });
-                                }}
-                              >
-                                <Delete />
-                              </IconButton>
+                              <Box sx={{ display: "flex", gap: 1 }}>
+                                <IconButton
+                                  color="primary"
+                                  aria-label="edit"
+                                  sx={{
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      backgroundColor: "#1976d2",
+                                      color: "white",
+                                    },
+                                  }}
+                                  onClick={() => {
+                                    onSetActiveProduct(product);
+                                    setisEditVisible(true);
+                                  }}
+                                >
+                                  <Edit />
+                                </IconButton>
+                                <IconButton
+                                  color="secondary"
+                                  aria-label="delete"
+                                  sx={{
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      backgroundColor: "#d32f2f",
+                                      color: "white",
+                                    },
+                                  }}
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: "¿Estás seguro?",
+                                      text: "¡No podrás revertir esta acción!",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#3085d6",
+                                      cancelButtonColor: "#d33",
+                                      confirmButtonText: "Sí, eliminar",
+                                      cancelButtonText: "Cancelar",
+                                      showLoaderOnConfirm: true,
+                                    }).then(async (result) => {
+                                      if (result.isConfirmed) {
+                                        await onPressDeleteProduct(product);
+                                      }
+                                    });
+                                  }}
+                                >
+                                  <Delete />
+                                </IconButton>
+                              </Box>
                             </TableCell>
                           </TableRow>
                         ))}

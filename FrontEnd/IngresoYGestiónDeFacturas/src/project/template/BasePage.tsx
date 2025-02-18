@@ -11,6 +11,7 @@ export const BasePage = ({ children }: Children) => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        bgcolor: "secondary.main",
       }}
     >
       {children}

@@ -9,6 +9,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -63,7 +65,6 @@ export const CustomerDialogEdit = ({ open = false, onClose }: Props) => {
     useLazyGetCustomersQuery();
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPutCustomer(formState)
       .unwrap()
       .then(async () => await fetchGetCustomers().unwrap().then(onSetCustomers))
@@ -196,6 +197,9 @@ export const CustomerDialogEdit = ({ open = false, onClose }: Props) => {
           Guardar
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };

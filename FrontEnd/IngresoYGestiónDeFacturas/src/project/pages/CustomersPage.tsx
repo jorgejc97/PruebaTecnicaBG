@@ -8,6 +8,7 @@ import { Customer } from "../interface";
 import Swal from "sweetalert2";
 import { BasePage } from "../template";
 import {
+  Box,
   Button,
   Grid,
   IconButton,
@@ -82,7 +83,7 @@ export const CustomersPage = () => {
         direction="column"
         sx={{
           alignItems: "center",
-          p: 3,
+          p: 2,
           overflowY: "auto",
         }}
       >
@@ -241,53 +242,61 @@ export const CustomersPage = () => {
                               {customer.active ? "Activo" : "Inactivo"}
                             </TableCell>
                             <TableCell>
-                              <IconButton
-                                color="primary"
-                                aria-label="edit"
+                              <Box
                                 sx={{
-                                  borderRadius: "4px",
-                                  "&:hover": {
-                                    backgroundColor: "#1976d2",
-                                    color: "white",
-                                  },
-                                }}
-                                onClick={() => {
-                                  onSetActiveCustomer(customer);
-                                  setisEditVisible(true);
+                                  display: "flex",
+                                  gap: 1,
+                                  flexWrap: "wrap",
                                 }}
                               >
-                                <Edit />
-                              </IconButton>
-                              <IconButton
-                                color="secondary"
-                                aria-label="delete"
-                                sx={{
-                                  borderRadius: "4px",
-                                  "&:hover": {
-                                    backgroundColor: "#d32f2f",
-                                    color: "white",
-                                  },
-                                }}
-                                onClick={() => {
-                                  Swal.fire({
-                                    title: "¿Estás seguro?",
-                                    text: "¡No podrás revertir esta acción!",
-                                    icon: "warning",
-                                    showCancelButton: true,
-                                    confirmButtonColor: "#3085d6",
-                                    cancelButtonColor: "#d33",
-                                    confirmButtonText: "Sí, eliminar",
-                                    cancelButtonText: "Cancelar",
-                                    showLoaderOnConfirm: true,
-                                  }).then(async (result) => {
-                                    if (result.isConfirmed) {
-                                      await onPressDeleteCustomer(customer);
-                                    }
-                                  });
-                                }}
-                              >
-                                <Delete />
-                              </IconButton>
+                                <IconButton
+                                  color="primary"
+                                  aria-label="edit"
+                                  sx={{
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      backgroundColor: "#1976d2",
+                                      color: "white",
+                                    },
+                                  }}
+                                  onClick={() => {
+                                    onSetActiveCustomer(customer);
+                                    setisEditVisible(true);
+                                  }}
+                                >
+                                  <Edit />
+                                </IconButton>
+                                <IconButton
+                                  color="secondary"
+                                  aria-label="delete"
+                                  sx={{
+                                    borderRadius: "4px",
+                                    "&:hover": {
+                                      backgroundColor: "#d32f2f",
+                                      color: "white",
+                                    },
+                                  }}
+                                  onClick={() => {
+                                    Swal.fire({
+                                      title: "¿Estás seguro?",
+                                      text: "¡No podrás revertir esta acción!",
+                                      icon: "warning",
+                                      showCancelButton: true,
+                                      confirmButtonColor: "#3085d6",
+                                      cancelButtonColor: "#d33",
+                                      confirmButtonText: "Sí, eliminar",
+                                      cancelButtonText: "Cancelar",
+                                      showLoaderOnConfirm: true,
+                                    }).then(async (result) => {
+                                      if (result.isConfirmed) {
+                                        await onPressDeleteCustomer(customer);
+                                      }
+                                    });
+                                  }}
+                                >
+                                  <Delete />
+                                </IconButton>
+                              </Box>
                             </TableCell>
                           </TableRow>
                         ))}

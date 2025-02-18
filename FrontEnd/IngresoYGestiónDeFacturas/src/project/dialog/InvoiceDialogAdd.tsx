@@ -19,6 +19,8 @@ import {
   TableBody,
   IconButton,
   Autocomplete,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -36,6 +38,7 @@ import {
   useSellerStore,
 } from "../../shared";
 import { AddShoppingCart, Delete } from "@mui/icons-material";
+import { InvoicePdfGenerator } from "../components";
 
 interface Props {
   open: boolean;
@@ -55,6 +58,7 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
   const { products } = useProductStore();
   const { sellers } = useSellerStore();
   const { onSetInvoices } = useInvoiceStore();
+  const { viewPDF } = InvoicePdfGenerator();
 
   const [invoiceDetail, setInvoiceDetail] = useState<InvoiceDetail>({
     id: null,
@@ -156,7 +160,10 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
   const onPressSave = async () => {
     return await fetchPostInvoice(formState)
       .unwrap()
-      .then(async () => await fetchGetInvoice().unwrap().then(onSetInvoices))
+      .then(async () => {
+        await fetchGetInvoice().unwrap().then(onSetInvoices);
+        viewPDF(formState);
+      })
       .catch((error) => {
         Swal.fire("Error", error?.data?.detail ?? "Ocurrió un error", "error");
         throw error;
@@ -167,9 +174,7 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
     !open && resetForm();
   }, [open]);
 
-  useEffect(() => {
-    console.log(JSON.stringify(formState));
-  }, [formState]);
+  useEffect(() => {}, [formState]);
 
   return (
     <Dialog fullWidth={true} maxWidth={"xl"} open={open} onClose={onClose}>
@@ -562,9 +567,12 @@ export const InvoiceDialogAdd = ({ open = false, onClose }: Props) => {
           disabled={!isFormValid() || isLoading || isLoadingInvoices}
           color="primary"
         >
-          Guardar
+          Generar Factura
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };

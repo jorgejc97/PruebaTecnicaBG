@@ -85,7 +85,6 @@ export const InvoicePdfGenerator = () => {
         fontSize: 10,
       },
     });
-
     autoTable(doc, {
       startY: 100,
       head: [["VENDEDOR", "FECHA", "Metodo de Pago"]],
@@ -103,7 +102,6 @@ export const InvoicePdfGenerator = () => {
         ],
       ],
     });
-
     autoTable(doc, {
       startY: 130,
       head: [["Code", "Descripción", "Cantidad", "Precio Unitario", "Total"]],
@@ -115,9 +113,7 @@ export const InvoicePdfGenerator = () => {
         detail.total,
       ]),
     });
-
     const finalY = (doc as any).lastAutoTable.finalY || 110;
-
     autoTable(doc, {
       startY: finalY + 1,
       head: [["", ""]],
@@ -137,19 +133,22 @@ export const InvoicePdfGenerator = () => {
       },
       margin: { left: 150 },
     });
-
     doc.text("Gracias por su compra!", 80, finalY + 30);
-
     return doc;
   };
 
   const viewPDF = (invoiceParams: Invoice) => {
-    console.log(JSON.stringify(invoiceParams, null, 3));
-
     const doc = generatePDF(invoiceParams);
     const pdfBlob = doc.output("blob");
     const pdfUrl = URL.createObjectURL(pdfBlob);
-    window.open(pdfUrl, "_blank");
+
+    const pdfWindow = window.open(
+      pdfUrl,
+      "_blank",
+      "width=1000,height=700,scrollbars=yes,menubar=no,location=no,status=no,resizable=yes"
+    );
+
+    pdfWindow!.document.body.style.margin = "10px";
   };
 
   const downloadPDF = (invoiceParams: Invoice) => {
@@ -158,7 +157,6 @@ export const InvoicePdfGenerator = () => {
       4,
       "0"
     );
-    console.log(randomNumber);
     doc.save(`factura${randomNumber}.pdf`);
   };
 

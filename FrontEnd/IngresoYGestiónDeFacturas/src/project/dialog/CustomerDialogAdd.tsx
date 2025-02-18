@@ -5,6 +5,8 @@ import {
   TextField,
   DialogActions,
   Button,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import Swal from "sweetalert2";
 import { useForm } from "../../hooks";
@@ -59,7 +61,6 @@ export const CustomerDialogAdd = ({ open = false, onClose }: Props) => {
     useLazyGetCustomersQuery();
 
   const onPressSave = async () => {
-    console.log(JSON.stringify(formState));
     return await fetchPostCustomer(formState)
       .unwrap()
       .then(async () => await fetchGetCustomer().unwrap().then(onSetCustomers))
@@ -176,9 +177,12 @@ export const CustomerDialogAdd = ({ open = false, onClose }: Props) => {
           disabled={!isFormValid() || isLoading || isLoadingCustomers}
           color="primary"
         >
-          Guardar
+          Crear Cliente
         </Button>
       </DialogActions>
+      <Backdrop open={isLoading} sx={{ zIndex: 1000, color: "#fff" }}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </Dialog>
   );
 };
